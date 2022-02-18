@@ -13,7 +13,7 @@
         <?php
         if(isset($_GET['ERROR'])) echo "<p class=\"text-danger font-weight-bold\">Si è verificato un errore.</p>";
         if(isset($_GET['PHONE_INVALID'])) echo "<p class=\"text-danger font-weight-bold\">Il numero di telefono è errato.</p>";
-        if(isset($_GET['PHONE_CODE_INVALID'])) echo "<p class=\"text-danger font-weight-bold\">Il codice di verifica è errato.</p>";
+        //if(isset($_GET['PHONE_CODE_INVALID'])) echo "<p class=\"text-danger font-weight-bold\">Il codice di verifica è errato.</p>";
         ?>
         <div class="form-floating">
             <input type="text" id="inputServer" class="form-control mb-2" placeholder="Nome Server" required autofocus>

@@ -6,18 +6,19 @@
 */
 $("#login").submit(function (e) {
     e.preventDefault();
-    if ($("#inputCode").is(":hidden")) {
+   // if ($("#inputCode").is(":hidden")) {
         $("#form-btn").prop("disabled", true).text("Accesso in corso...");
-        $("#inputServer").prop("disabled", true);
-        $("#inputUser").prop("disabled", true);
-        $("#inputPassword").prop("disabled", true);
-        $("#inputPort").prop("disabled", true);
+        //$("#inputServer").prop("disabled", true);
+        //$("#inputUser").prop("disabled", true);
+        //$("#inputPassword").prop("disabled", true);
+        //$("#inputPort").prop("disabled", true);
         $(".text-danger").hide();
         //Creo sessione & richiedo il codice di verifica
         $.ajax({
             type: "POST",
             dataType: "JSON",
             url: serverUrl + "functions/login.php",
+
             data: {server: $("#inputServer").val(), user: $("#inputUser").val(), password: $("#inputPassword").val(),
                 port: $("#inputPort").val()},
             timeout: 120000,
@@ -26,18 +27,18 @@ $("#login").submit(function (e) {
                 let json = JSON.parse(result);
                 if (json.success) {
                     Cookies.set('token', json.token, { expires: 365 });
-                    $("#inputBox").show();
-                    $("#inputCode").prop("required", true).show();
-                    $("#form-btn").prop("disabled", false).text("Accedi");
+                    $("#form-btn").text("Fatto!");
+                    location.href = 'message.php';
                 } else {
-                    window.location = 'index.php?PHONE_INVALID=E';
+                   window.location = 'index.php?ERROR=E';
                 }
             },
             error: (e) => {
-                window.location = 'index.php?ERROR=E';
+                Cookies.remove('token');
+               window.location = 'index.php?ERROR=E';
             }
         });
-    } else {
+   /* } else {
         $("#form-btn").prop("disabled", true).text("Accesso in corso...");
         $("#inputCode").prop("disabled", true);
         $(".text-danger").hide();
@@ -63,5 +64,5 @@ $("#login").submit(function (e) {
                 window.location = 'index.php?ERROR=E';
             }
         });
-    }
+    }*/
 });
