@@ -28,8 +28,8 @@
             <label for="inputPassword">Password</label>
         </div>
         <div class="form-floating">
-            <input type="number" id="inputPort" class="form-control" pattern="^[0-65535]$"
-                   placeholder="21" required autofocus>
+            <input type="number" id="inputPort" class="form-control" pattern="^[0-9]$|^[1-9][0-9]$|^[1-9][0-9][0-9]$|^[1-9][0-9][0-9][0-9]$|^[1-6][0-5][0-5][0-3][0-5]$"
+                   placeholder="Porta" required autofocus>
             <label for="inputPort">Numero di porta</label>
         </div>
 

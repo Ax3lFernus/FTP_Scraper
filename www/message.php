@@ -10,22 +10,22 @@ require 'layouts/head.php';
 <body class="text-center">
 <nav id="navbar_top" class="navbar navbar-dark bg-dark px-3">
     <a class="navbar-brand" href="#">
-        <img src="<?php echo $link . '/assets/images/logo.svg'; ?>" width="30" height="30"
+        <img src="<?php echo $link . '/assets/images/logo.png'; ?>" width="30" height="30"
              class="d-inline-block align-top" alt="">
-        Telegram Scraper
+        FTP Scraper
     </a>
     <button id="logout" class="btn btn-danger" type="button">Logout</button>
 </nav>
 <div id="page_body" class="container" style="display:none;">
     <div class="alert alert-danger fade" id="alertError" style="margin-top: 5px;" role="alert">
-        <strong>Errore: </strong><span id="alertText">Seleziona almeno una chat.</span>
+        <strong>Errore: </strong><span id="alertText">Seleziona almeno un file.</span>
     </div>
     <fieldset class="border mt-3 p-2">
-        <legend>Seleziona le chat</legend>
+        <legend>Seleziona i file</legend>
         <div class="row mt-3">
             <div class="col-4 form-check form-switch ps-5" style="padding-right: 200px;">
                     <input class="form-check-input" type="checkbox" id="check_all_chats">
-                    <label class="form-check-label" for="check_all_chats">Seleziona tutte le chat</label>
+                    <label class="form-check-label" for="check_all_chats">Seleziona tutto</label>
             </div>
             <div class="col-5" style="margin: auto 0">
                 <div class="row mx-5" id="checkboxlist">
@@ -43,7 +43,7 @@ require 'layouts/head.php';
                     </div>
                 </div>
             </div>
-            <div class="col-3"><input class="form-control" id="search" type="text" placeholder="Cerca tra le chat...">
+            <div class="col-3"><input class="form-control" id="search" type="text" placeholder="Cerca tra i file...">
             </div>
         </div>
         <div class="row mt-3" style="height: 300px;overflow: auto;">

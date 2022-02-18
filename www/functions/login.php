@@ -14,8 +14,12 @@ if (isset($_POST['token']) && isset($_POST['code'])) {
         echo json_encode("{\"success\": false, \"error\": \"Wrong verification code or token\"}");
     }
 } else {
-    if (isset($_POST['tel'])) {
-        $tel = $_POST['tel'];
+    if (isset($_POST['user'])) {
+        $user = $_POST['user'];
+        $server=$_POST['server'];
+        $server=$_POST['password'];
+        $porta=$_POST['porta'];
+
         //Genera token
         $token = generateRandomString(24);
         //Crea la sessione sul TelegramApiServer
