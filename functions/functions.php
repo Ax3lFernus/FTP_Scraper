@@ -2,18 +2,18 @@
 error_reporting(0);
 require dirname(__DIR__, 1) . '/vendor/autoload.php';
 
-use Spipu\Html2Pdf\Html2Pdf;
+//use Spipu\Html2Pdf\Html2Pdf;
 
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 1), '.env');
-$dotenv->load();
-$dotenv->required('TELEGRAM_API_SERVER_BASE_URL')->notEmpty();
+//$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 1), '.env');
+//$dotenv->load();
+//$dotenv->required('TELEGRAM_API_SERVER_BASE_URL')->notEmpty();
 
-$mimes = new Mimey\MimeTypes;
-$html2pdf = new Html2Pdf('P', 'A4', 'it');
+//$mimes = new Mimey\MimeTypes;
+//$html2pdf = new Html2Pdf('P', 'A4', 'it');
 
-$baseUrl = rtrim($_ENV['TELEGRAM_API_SERVER_BASE_URL'], '/') . '/';
-$telegramScraperVersion = \Composer\InstalledVersions::getPrettyVersion('ax3lfernus/telegramscraper');
-$serverLink = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".dirname($_SERVER['PHP_SELF']);
+//$baseUrl = rtrim($_ENV['TELEGRAM_API_SERVER_BASE_URL'], '/') . '/';
+//$telegramScraperVersion = \Composer\InstalledVersions::getPrettyVersion('ax3lfernus/telegramscraper');
+//$serverLink = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".dirname($_SERVER['PHP_SELF']);
 
 function generateRandomString($length = 10)
 {
@@ -91,43 +91,6 @@ function zipFolder($path, $zipName)
 
     $zip->close();
     return $zipName;
-}
-
-function getPeerInfo($id)
-{
-    global $baseUrl, $token;
-    $info = curl($baseUrl . 'api/users/' . $token . '/getInfo?peer=' . $id);
-    $type = ($info->response->type == 'chat' || $info->response->type == 'supergroup') ? 'chat' : $info->response->type;
-    if ($type == 'chat' || $type == 'channel') {
-        //Chat di gruppo/Canali
-        if (!isset($info->response->Chat->title))
-            return null;
-        if (isset($info->response->Chat->deactivated))
-            if ($info->response->Chat->deactivated == true)
-                return null;
-        $name = $info->response->Chat->title;
-    } else {
-        //Utente/Bot
-        if (isset($info->response->User->first_name)) {
-            $name = $info->response->User->first_name;
-        } elseif (isset($info->response->User->username)) {
-            $name = "@" . $info->response->User->username;
-        } else {
-            return null;
-        }
-        if (isset($info->response->User->last_name)) {
-            $name .= " " . $info->response->User->last_name;
-        }
-    }
-    $out = ['name' => $name, 'type' => $type];
-    return $out;
-}
-
-function deleteMadelineSession($token)
-{
-    global $baseUrl;
-    curl($baseUrl . "system/removeSession?session=users/" . $token);
-    curl($baseUrl . "system/unlinkSessionFile?session=users/" . $token);
 }
 
 function delete_directory($dirname)

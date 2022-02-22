@@ -14,15 +14,22 @@ if (isset($_POST['token']) && isset($_POST['code'])) {
         echo json_encode("{\"success\": false, \"error\": \"Wrong verification code or token\"}");
     }
 } else {*/
-    if (isset($_POST['server']) && isset($_POST['user']) && isset($_POST['password']) && isset($_POST['port'])) {
-        $user = $_POST['user'];
-        $server=$_POST['server'];
-        $pass=$_POST['password'];
-        $port=$_POST['port'];
+    if (isset($_POST['server']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['port']) && isset($_POST['protocol'])) {
+        $server =$_POST['server'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $port = $_POST['port'];
+        $protocol = $_POST['protocol'];
 
-        //Genera token
-        $token = generateRandomString(24);
-        echo json_encode("{\"success\": true, \"token\": \"" . $token . "\"}");
+        $ftp = new \FtpClient\FtpClient();
+        try {
+            $ftp->connect($server, $protocol == 'true', $port);
+            $ftp->login($username, $password);
+            $token = generateRandomString(24);
+            echo json_encode("{\"success\": true, \"token\": \"" . $token . "\"}");
+        } catch (\FtpClient\FtpException $e) {
+            echo json_encode("{\"success\": false, \"error\": \"Unable to connect to server\"}");
+        }
         //Crea la sessione sul TelegramApiServer
       /* $output = curl($baseUrl . "system/addSession?session=users/" . $token);
         if ($output->success) {

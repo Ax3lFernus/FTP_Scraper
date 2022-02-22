@@ -8,10 +8,11 @@ $("#login").submit(function (e) {
     e.preventDefault();
    // if ($("#inputCode").is(":hidden")) {
         $("#form-btn").prop("disabled", true).text("Accesso in corso...");
-        //$("#inputServer").prop("disabled", true);
-        //$("#inputUser").prop("disabled", true);
-        //$("#inputPassword").prop("disabled", true);
-        //$("#inputPort").prop("disabled", true);
+        $("#username").prop("disabled", true);
+        $("#password").prop("disabled", true);
+        $("#server").prop("disabled", true);
+        $("#port").prop("disabled", true);
+        $("#protocol").prop("disabled", true);
         $(".text-danger").hide();
         //Creo sessione & richiedo il codice di verifica
         $.ajax({
@@ -19,8 +20,8 @@ $("#login").submit(function (e) {
             dataType: "JSON",
             url: serverUrl + "functions/login.php",
 
-            data: {server: $("#inputServer").val(), user: $("#inputUser").val(), password: $("#inputPassword").val(),
-                port: $("#inputPort").val()},
+            data: {server: $("#server").val(), username: $("#username").val(), password: $("#password").val(),
+                port: $("#port").val(), protocol: $("#protocol").val() !== 1 ? true : false},
             timeout: 120000,
             success: (result) => {
                 console.log(result);
@@ -28,14 +29,14 @@ $("#login").submit(function (e) {
                 if (json.success) {
                     Cookies.set('token', json.token, { expires: 365 });
                     $("#form-btn").text("Fatto!");
-                    location.href = 'message.php';
+                    //location.href = 'message.php';
                 } else {
                    window.location = 'index.php?ERROR=E';
                 }
             },
             error: (e) => {
                 Cookies.remove('token');
-               window.location = 'index.php?ERROR=E';
+                window.location = 'index.php?ERROR=E';
             }
         });
    /* } else {
