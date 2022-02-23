@@ -1,8 +1,12 @@
 <?php
-    require 'functions/checkToken.php';
-    $style = "<link href=\"assets/css/signin.css\" rel=\"stylesheet\">";
-    $page_title = "Login";
-    require 'layouts/head.php';
+session_start();
+if(isset($_SESSION['ftp_vars'])) {
+    header("Location: /download.php");
+    exit();
+}
+$style = "<link href=\"assets/css/signin.css\" rel=\"stylesheet\">";
+$page_title = "Login";
+require 'layouts/head.php';
 ?>
 
 <body class="text-center">
@@ -11,9 +15,7 @@
         <img class="mb-3" src="<?php echo $link . '/assets/images/logo.png'; ?>" alt="" width="100" height="100">
         <h1 class="h3 mb-3 fw-normal">Accedi al server FTP</h1>
         <?php
-        if(isset($_GET['ERROR'])) echo "<p class=\"text-danger font-weight-bold\">Si è verificato un errore.</p>";
-        if(isset($_GET['PHONE_INVALID'])) echo "<p class=\"text-danger font-weight-bold\">Il numero di telefono è errato.</p>";
-        //if(isset($_GET['PHONE_CODE_INVALID'])) echo "<p class=\"text-danger font-weight-bold\">Il codice di verifica è errato.</p>";
+        if(isset($_GET['error'])) echo "<p class=\"text-danger font-weight-bold\">" . $_GET['error'] . "</p>";
         ?>
         <div class="form-floating mb-3">
             <select class="form-select" id="protocol">

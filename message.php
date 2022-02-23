@@ -1,5 +1,4 @@
 <?php
-require __DIR__ . '/functions/checkToken.php';
 require __DIR__ . '/functions/getDialogs.php';
 $style = "<link href=\"assets/css/message.css\" rel=\"stylesheet\">";
 $page_title = "Messaggi";

@@ -6,64 +6,33 @@
 */
 $("#login").submit(function (e) {
     e.preventDefault();
-   // if ($("#inputCode").is(":hidden")) {
-        $("#form-btn").prop("disabled", true).text("Accesso in corso...");
-        $("#username").prop("disabled", true);
-        $("#password").prop("disabled", true);
-        $("#server").prop("disabled", true);
-        $("#port").prop("disabled", true);
-        $("#protocol").prop("disabled", true);
-        $(".text-danger").hide();
-        //Creo sessione & richiedo il codice di verifica
-        $.ajax({
-            type: "POST",
-            dataType: "JSON",
-            url: serverUrl + "functions/login.php",
+    $("#form-btn").prop("disabled", true).text("Accesso in corso...");
+    $("#username").prop("disabled", true);
+    $("#password").prop("disabled", true);
+    $("#server").prop("disabled", true);
+    $("#port").prop("disabled", true);
+    $("#protocol").prop("disabled", true);
+    $(".text-danger").hide();
+    $.ajax({
+        type: "POST",
+        dataType: "JSON",
+        url: serverUrl + "functions/login.php",
 
-            data: {server: $("#server").val(), username: $("#username").val(), password: $("#password").val(),
-                port: $("#port").val(), protocol: $("#protocol").val() !== 1 ? true : false},
-            timeout: 120000,
-            success: (result) => {
-                console.log(result);
-                let json = JSON.parse(result);
-                if (json.success) {
-                    Cookies.set('token', json.token, { expires: 365 });
-                    $("#form-btn").text("Fatto!");
-                    //location.href = 'message.php';
-                } else {
-                   window.location = 'index.php?ERROR=E';
-                }
-            },
-            error: (e) => {
-                Cookies.remove('token');
-                window.location = 'index.php?ERROR=E';
+        data: {server: $("#server").val(), username: $("#username").val(), password: $("#password").val(),
+            port: $("#port").val(), protocol: $("#protocol").val() != 1},
+        timeout: 120000,
+        success: (result) => {
+            console.log(result);
+            let json = JSON.parse(result);
+            if (json.success) {
+                $("#form-btn").text("Connessione effettuata...");
+                location.href = 'download.php';
+            } else {
+                window.location = 'index.php?error=' + json.error;
             }
-        });
-   /* } else {
-        $("#form-btn").prop("disabled", true).text("Accesso in corso...");
-        $("#inputCode").prop("disabled", true);
-        $(".text-danger").hide();
-        //Accedo con il codice
-        $.ajax({
-            type: "POST",
-            dataType: "JSON",
-            url: serverUrl + "functions/login.php",
-            data: {token: Cookies.get('token'), code: $("#inputCode").val()},
-            timeout: 120000,
-            success: (result) => {
-                console.log(result);
-                let json = JSON.parse(result);
-                if (json.success) {
-                    $("#form-btn").text("Fatto!");
-                    location.href = 'message.php'
-                } else {
-                    window.location = 'index.php?PHONE_CODE_INVALID=E';
-                }
-            },
-            error: (e) => {
-                Cookies.remove('token');
-                window.location = 'index.php?ERROR=E';
-            }
-        });
-    }*/
+        },
+        error: (e) => {
+            window.location = 'index.php?error=Si è verificato un errore durante la connessione.';
+        }
+    });
 });
