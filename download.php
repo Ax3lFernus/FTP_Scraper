@@ -15,7 +15,7 @@ $ftp = new \FtpClient\FtpClient();
 try {
     $ftp->connect($_SESSION['ftp_vars']['server'], $_SESSION['ftp_vars']['protocol'], $_SESSION['ftp_vars']['port']);
     $ftp->login($_SESSION['ftp_vars']['username'], $_SESSION['ftp_vars']['password']);
-   // var_dump($ftp->scanDir('/ciaon'));
+    var_dump($ftp->scanDir('.', true));
 } catch (\FtpClient\FtpException $e) {
     echo $e;
 }
