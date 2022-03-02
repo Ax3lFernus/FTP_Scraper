@@ -33,5 +33,16 @@ fieldset
 {
   border-radius: 20px
 }
+
+td > p > a
+{
+  color:black;
+  text-decoration:none;
+}
+
+td > a:hover
+{
+  color:#0d6efd;
+}
 .tableFixHead          { overflow-y: auto; height: 100%; }
 .tableFixHead thead th { position: sticky; top: 0; background: #f5f5f5; }

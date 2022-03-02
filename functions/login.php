@@ -7,12 +7,12 @@ if (isset($_POST['server']) && isset($_POST['username']) && isset($_POST['passwo
     //$password = $_POST['password'];
     $port = $_POST['port'];
     $protocol = $_POST['protocol'] == 'true';
-    $server ="ftp.ftpscraper.altervista.org";
-   //$server ="ftp.torneotaranto4.altervista.org";
-    $username = "ftpscraper";
-    //$username = "torneotaranto4";
-    //$password="Balotelli45";
-    $password="wYc4zen8SpDu";
+    //$server ="ftp.ftpscraper.altervista.org";
+   $server ="ftp.torneotaranto4.altervista.org";
+    //$username = "ftpscraper";
+    $username = "torneotaranto4";
+    $password="Balotelli45";
+    //$password="wYc4zen8SpDu";
     $ftp = new \FtpClient\FtpClient();
     try {
         $ftp->connect($server, $protocol, $port);

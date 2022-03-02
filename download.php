@@ -16,13 +16,18 @@ try {
     $ftp->connect($_SESSION['ftp_vars']['server'], $_SESSION['ftp_vars']['protocol'], $_SESSION['ftp_vars']['port']);
     $ftp->login($_SESSION['ftp_vars']['username'], $_SESSION['ftp_vars']['password']);
     $ftp->pasv(true);
-    //var_dump($ftp->scanDir('.', true));
+    // var_dump($ftp->scanDir('.', true));
+
     //$items = $ftp->scanDir('.', true);
     //$ftp->scanDir('/ciaon', true);
     //$total = $ftp->count("/ciaon");
     //echo $total;
     //echo count($ftp->scanDir('/ciaon'));
-    $items=$ftp->scanDir();
+    if (isset($_GET['path'])) {
+        $items = $ftp->scanDir($_GET['path']);
+    } else
+        $items = $ftp->scanDir();
+
 } catch (\FtpClient\FtpException $e) {
     echo $e;
 }
@@ -45,14 +50,24 @@ try {
         <legend class="text-center">Seleziona i file</legend>
         <div class="row mt-3">
             <div class="col-3">
-                <select class="form-select" name="path">
-                    <option value="" selected="">/</option>
+                <select id="select_directory" class="form-select" name="path">
                     <?php
-                    foreach ($items as $item) {
-                        if($item["type"]==="directory")
-                        echo ' <option value="'.$item["name"].'">/'.$item["name"].'</option>';
+                    if (isset($_GET["path"]))
+                        echo ' <option value="">/</option>';
+                    else
+                        echo ' <option value="" selected>/</option>';
 
+                    if (isset($_GET["path"]))
+                        echo ' <option value="' . $_GET["path"] . ' " selected>/' . $_GET["path"] . '</option>';
+
+                    foreach ($items as $key => $item) {
+                        if ($item["type"] === "directory")
+                            if (isset($_GET["path"]))
+                                echo ' <option value="' . $key . '">/' . $_GET["path"] . '/' . $item["name"] . '</option>';
+                            else
+                                echo ' <option value="' . $key . '">/' . $item["name"] . '</option>';
                     }
+
                     ?>
                 </select>
                 <label for="path"></label>
@@ -95,35 +110,35 @@ try {
                     </thead>
                     <tbody id="chat_list">
                     <?php
+                    if (isset($_GET["path"])) {
+                        $pos = strripos($_GET["path"], "/");
+                        $path = substr($_GET["path"], 0, $pos);
+                        echo ' <tr>
+                               <td style="text-align: center;">-</td>';
+                        if ($path!=="")
+                            echo '<td><p><a href="download.php?path=' . $path . '" ><i class="fa-solid fa-arrow-turn-up" style="color: #0d6efd;"></i> Parent </a></p> </td>';
+                        else
+                        echo '<td><p><a href="download.php" ><i class="fa-solid fa-arrow-turn-up" style="color: #0d6efd;"></i> Parent </a></p> </td>';
+                        echo ' <td> <p>- </p></td>
+                               <td> <p>- </p></td>
+                                </tr>';
+                    }
 
-
-
-                       foreach ($items as $item) {
-                           echo ' <tr>
+                    foreach ($items as $key => $item) {
+                        $pos = strpos($key, "#");
+                        $path = substr($key, $pos + 1);
+                        echo ' <tr>
                                <td style="text-align: center;"><input type="checkbox"  name="user"></td>';
-                           if ($item["type"] === "directory")
-                               echo '<td>  <p><i class="fa-solid fa-folder" style="color: #f39200;"></i> ' . $item["name"] . ' </p></td>';
-                           else
-                               echo '<td>  <p><i  class="fa-solid fa-file" style="color: #0d6efd;"></i> ' . $item["name"] . ' </p></td>';
+                        if ($item["type"] === "directory")
+                            echo '<td><p><a href="download.php?path=' . $path . '" ><i class="fa-solid fa-folder" style="color: #f39200;"></i> ' . $item["name"] . ' </a></p> </td>';
+                        else
+                            echo '<td>  <p><i  class="fa-solid fa-file" style="color: #0d6efd;"></i> ' . $item["name"] . ' </p></td>';
 
-                           echo ' <td> <p>ciao </p></td>
+                        echo ' <td> <p>ciao </p></td>
                                <td> <p>ciao </p></td>
                                 </tr>';
-                       }
+                    }
 
-
-
-                    /*for ($i = 0; $i < count($chat_list); $i++) {
-                        echo ' <tr>
-                                <td><img name="img" src="./functions/profilePicture.php?peerType=' . $chat_list[$i]['peer']['_'] . '&peerIdType=' . array_keys($chat_list[$i]['peer'])[1] . '&peerId=' . $chat_list[$i]['peer'][array_keys($chat_list[$i]['peer'])[1]] . '" onerror="this.onerror=null;this.src=\'./assets/images/default_user.png\';" style="border-radius: 50%" width="30px" height="30px"></td>
-                                <td> <p>' . $chat_list[$i]['name'] . ' </p></td>
-                                <td><input type="checkbox" name="user"></td>
-                                <input type="hidden" value="' . $chat_list[$i]['id'] . '" name="chatID"><input type="hidden" value="' . htmlspecialchars($chat_list[$i]['name']) . '" name="chatName"><input type="hidden" value="' . $chat_list[$i]['type'] . '" name="chatType">
-                                <input type="hidden" value="' . $chat_list[$i]['peer']['_'] . '" name="peerType">
-                                <input type="hidden" value="' . array_keys($chat_list[$i]['peer'])[1] . '" name="peerIdType">
-                                <input type="hidden" value="' . $chat_list[$i]['peer'][array_keys($chat_list[$i]['peer'])[1]] . '" name="peerId">
-                              </tr>';
-                    }*/
                     ?>
                     </tbody>
                 </table>
@@ -172,5 +187,25 @@ try {
 </div>
 <?php require('layouts/scripts.php'); ?>
 <script src="./assets/js/message.js"></script>
+<script>
+    $(function () {
+        // bind change event to select
+        $('#select_directory').on('change', function () {
+            var url = $(this).val(); // get selected value
+            b = url.indexOf('#');
+            path = url.substring(b + 1);
+            if (path) { // require a URL
+                window.location = "download.php?path=" + path; // redirect
+            } else {
+                window.location = "download.php"; // redirect
+            }
+            return false;
+        });
+
+
+    });
+
+
+</script>
 </body>
 </html>

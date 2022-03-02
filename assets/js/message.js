@@ -266,5 +266,6 @@ checkMediaDownloadStatus = (media_num, zipName, reportUrl, reportName) => {
             setTimeout(checkMediaDownloadStatus.bind(null, media_num, zipName, reportUrl, reportName), 5000);
         }
     });
+
 }
 
