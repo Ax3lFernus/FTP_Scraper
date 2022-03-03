@@ -1,6 +1,6 @@
 <?php
 session_start();
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/functions/functions.php';
 if (!isset($_SESSION['ftp_vars'])) {
     session_unset();
     session_destroy();
@@ -10,12 +10,13 @@ if (!isset($_SESSION['ftp_vars'])) {
 $style = "<link href=\"assets/css/message.css\" rel=\"stylesheet\">";
 $page_title = "Files";
 require 'layouts/head.php';
-
+$_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Riconnessione per recuperare il contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "'";
 $ftp = new \FtpClient\FtpClient();
 try {
     $ftp->connect($_SESSION['ftp_vars']['server'], $_SESSION['ftp_vars']['protocol'], $_SESSION['ftp_vars']['port']);
     $ftp->login($_SESSION['ftp_vars']['username'], $_SESSION['ftp_vars']['password']);
     $ftp->pasv(true);
+    $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Connessione effettuata. Recupero il contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "'";
     // var_dump($ftp->scanDir('.', true));
 
     //$items = $ftp->scanDir('.', true);
@@ -25,12 +26,16 @@ try {
     //echo count($ftp->scanDir('/ciaon'));
     if (isset($_GET['path'])) {
         $items = $ftp->scanDir($_GET['path']);
+        $items = array_reverse($items);
     } else
         $items = $ftp->scanDir();
-
+    $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "' recuperato";
 } catch (\FtpClient\FtpException $e) {
+    $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Errore durante la connessione al server.";
     echo $e;
 }
+//create_folder(__DIR__ . '/tmp/' . $_SESSION['id']); CREATE FOLDER
+//file_put_contents( __DIR__ . '/tmp/' . $_SESSION['id'] . '/log.txt', $_SESSION['log']); SAVE LOGS
 ?>
 
 <body>
@@ -40,7 +45,7 @@ try {
              class="d-inline-block align-top" alt="">
         FTP Scraper
     </a>
-    <button id="logout" class="btn btn-danger" type="button">Logout</button>
+    <button onclick="window.location.href = '/functions/logout.php'" class="btn btn-danger" type="button">Logout</button>
 </nav>
 <div id="page_body" class="container" style="display:none;">
     <div class="alert alert-danger fade" id="alertError" style="margin-top: 5px;" role="alert">
@@ -186,10 +191,9 @@ try {
     </div>
 </div>
 <?php require('layouts/scripts.php'); ?>
-<script src="./assets/js/message.js"></script>
+<script src="./assets/js/download.js"></script>
 <script>
     $(function () {
-        // bind change event to select
         $('#select_directory').on('change', function () {
             var url = $(this).val(); // get selected value
             b = url.indexOf('#');
@@ -201,11 +205,7 @@ try {
             }
             return false;
         });
-
-
     });
-
-
 </script>
 </body>
 </html>

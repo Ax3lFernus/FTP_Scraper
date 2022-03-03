@@ -4,25 +4,6 @@
 * Author: Alessandro Annese & Davide De Salvo
 * Last update: 19/02/2021
 */
-$("#logout").on('click', _ => {
-    $('#modalLoading').modal({backdrop: 'static', keyboard: false, show: true, focus: true}).modal('show');
-    $('#modalTitle').text('Logout in corso...');
-    $.ajax({
-        type: "GET",
-        dataType: "JSON",
-        url: serverUrl + "functions/logout.php",
-        timeout: 120000,
-        success: (result) => {
-            console.log(result);
-            Cookies.remove('token');
-            window.location = 'index.php';
-        },
-        error: (e) => {
-            Cookies.remove('token');
-            window.location = 'index.php';
-        }
-    });
-});
 
 $('#checkboxlist').find('input:checkbox').on('click', function () {
     var showAll = true;

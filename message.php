@@ -179,6 +179,6 @@ require 'layouts/head.php';
     </div>
 </div>
 <?php require('layouts/scripts.php'); ?>
-<script src="./assets/js/message.js"></script>
+<script src="assets/js/download.js"></script>
 </body>
 </html>

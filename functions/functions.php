@@ -15,7 +15,7 @@ require dirname(__DIR__, 1) . '/vendor/autoload.php';
 //$telegramScraperVersion = \Composer\InstalledVersions::getPrettyVersion('ax3lfernus/telegramscraper');
 //$serverLink = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".dirname($_SERVER['PHP_SELF']);
 
-function generateRandomString($length = 10)
+function generateRandomString($length = 12)
 {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);

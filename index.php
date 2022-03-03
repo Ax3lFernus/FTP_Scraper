@@ -12,10 +12,11 @@ require 'layouts/head.php';
 <body class="text-center">
 <main class="form-signin">
     <form id="login" method="post" action="/functions/login.php">
-        <img class="mb-3" src="<?php echo $link . '/assets/images/logo.png'; ?>" alt="" width="100" height="100">
+        <img class="mb-3" src="/assets/images/logo.png" alt="" width="100" height="100">
         <h1 class="h3 mb-3 fw-normal">Accedi al server FTP</h1>
         <?php
         if(isset($_GET['error'])) echo "<p class=\"text-danger font-weight-bold\">" . $_GET['error'] . "</p>";
+        if(isset($_GET['info'])) echo "<p class=\"text-primary font-weight-bold\">" . $_GET['info'] . "</p>";
         ?>
         <div class="form-floating mb-3">
             <select class="form-select" id="protocol" name="protocol">

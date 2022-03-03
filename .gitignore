@@ -1,3 +1,5 @@
 vendor/*
 tmp/*
 .idea/*
+.DS_Store
+log.txt
