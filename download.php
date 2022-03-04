@@ -109,8 +109,8 @@ try {
                             </div>
                         </th>
                         <th class="col-7" scope="col">File</th>
-                        <th scope="col">Dimensione</th>
-                        <th scope="col">Ultima modifica</th>
+                        <th style="text-align: right;" scope="col">Dimensione</th>
+                        <th style="text-align: right;" scope="col">Ultima modifica</th>
                     </tr>
                     </thead>
                     <tbody id="chat_list">
@@ -124,8 +124,8 @@ try {
                             echo '<td><p><a href="download.php?path=' . $path . '" ><i class="fa-solid fa-arrow-turn-up" style="color: #0d6efd;"></i> Parent </a></p> </td>';
                         else
                         echo '<td><p><a href="download.php" ><i class="fa-solid fa-arrow-turn-up" style="color: #0d6efd;"></i> Parent </a></p> </td>';
-                        echo ' <td> <p>- </p></td>
-                               <td> <p>- </p></td>
+                        echo ' <td style="text-align: right;"> <p>- </p></td>
+                               <td style="text-align: right;"> <p>- </p></td>
                                 </tr>';
                     }
 
@@ -139,11 +139,11 @@ try {
                         else
                             echo '<td>  <p><i  class="fa-solid fa-file" style="color: #0d6efd;"></i> ' . $item["name"] . ' </p></td>';
                         if ($item["type"] === "directory")
-                        echo ' <td> <p> - </p></td>';
+                        echo ' <td style="text-align: right;"> <p> - </p></td>';
                         else
-                            echo ' <td> <p>' . formatBytes($item["size"]) . ' </p></td>';
+                            echo ' <td style="text-align: right;"> <p>' . formatBytes($item["size"]) . ' </p></td>';
 
-                        echo '<td> <p>ciao </p></td>
+                        echo '<td style="text-align: right;" > <p >ciao </p></td>
                                 </tr>';
                     }
 
