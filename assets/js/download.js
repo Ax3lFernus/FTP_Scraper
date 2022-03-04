@@ -98,6 +98,36 @@ $('.card').on('click', function (e) {
         $checkbox.prop('checked', !$checkbox.prop('checked'));
     }
 });
+$("input[type=checkbox][name='user']").on('click', function () {
+
+    path = $(this).val();
+    const json= [];
+    var selected = {percorso: path};
+
+
+    if ($(this).is(":checked")) {
+        json.push(selected); //inserire nel json
+    } else {
+        json.pop(selected); //togliere dal json
+    }
+    window.console.log(json);
+
+});
+
+$(document).ready(function () {
+    var selected = [{percorso: "Directory 1"}, {percorso: "Directory 1/Directory 1 1"}];
+    $.each(selected, function(i, item) {
+        var path = selected[i].percorso;
+        window.console.log(path);
+        $("input[type=checkbox][name='user']").each(function () {
+            var val = $(this).val();
+            window.console.log(val);
+            if (val===path) {
+                $(this).prop('checked', 'checked');
+            }
+        });
+    });
+});
 
 $(document).ready(function () {
     $('#modalLoading').modal({backdrop: 'static', keyboard: false, show: true, focus: true}).modal('show');
@@ -157,6 +187,9 @@ $(document).ready(function () {
 
 
     });
+
+
+
 });
 
 sendChats = (type = 'csv', chats = getCheckedChats()) => {

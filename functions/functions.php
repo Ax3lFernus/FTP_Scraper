@@ -118,3 +118,9 @@ function create_folder($folderName){
     }
     mkdir($folderName, 0777, true);
 }
+
+function formatBytes($bytes, $precision = 2) {
+    $units = array('B', 'KB', 'MB', 'GB', 'TB');
+    $base = log($bytes, 1024);
+    return round(pow(1024, $base - floor($base)), $precision) .' '. $units[floor($base)];
+}

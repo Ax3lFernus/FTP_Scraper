@@ -133,14 +133,17 @@ try {
                         $pos = strpos($key, "#");
                         $path = substr($key, $pos + 1);
                         echo ' <tr>
-                               <td style="text-align: center;"><input type="checkbox"  name="user"></td>';
+                               <td style="text-align: center;"><input value="'.$path.'" type="checkbox"  name="user"></td>';
                         if ($item["type"] === "directory")
                             echo '<td><p><a href="download.php?path=' . $path . '" ><i class="fa-solid fa-folder" style="color: #f39200;"></i> ' . $item["name"] . ' </a></p> </td>';
                         else
                             echo '<td>  <p><i  class="fa-solid fa-file" style="color: #0d6efd;"></i> ' . $item["name"] . ' </p></td>';
+                        if ($item["type"] === "directory")
+                        echo ' <td> <p> - </p></td>';
+                        else
+                            echo ' <td> <p>' . formatBytes($item["size"]) . ' </p></td>';
 
-                        echo ' <td> <p>ciao </p></td>
-                               <td> <p>ciao </p></td>
+                        echo '<td> <p>ciao </p></td>
                                 </tr>';
                     }
 
