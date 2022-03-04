@@ -80,8 +80,8 @@ try {
             <div class="col-6" style="margin: auto 0">
                 <div class="row mx-5" id="checkboxlist">
                     <div class="col">
-                        <input rel="user" type="checkbox" id="select_all_chat_user" name="select_all_chat_user">
-                        <label class="form-check-label" for="select_all_chat_user">Utenti</label>
+                        <input rel="directory" type="checkbox" id="select_all_directory" name="select_all_directory">
+                        <label class="form-check-label" for="select_all_directory">Directory</label>
                     </div>
                     <div class="col">
                         <input rel="channel" type="checkbox" id="select_all_chat_channel"
@@ -118,7 +118,7 @@ try {
                     if (isset($_GET["path"])) {
                         $pos = strripos($_GET["path"], "/");
                         $path = substr($_GET["path"], 0, $pos);
-                        echo ' <tr>
+                        echo ' <tr id="parent">
                                <td style="text-align: center;">-</td>';
                         if ($path!=="")
                             echo '<td><p><a href="download.php?path=' . $path . '" ><i class="fa-solid fa-arrow-turn-up" style="color: #0d6efd;"></i> Parent </a></p> </td>';
@@ -132,12 +132,12 @@ try {
                     foreach ($items as $key => $item) {
                         $pos = strpos($key, "#");
                         $path = substr($key, $pos + 1);
-                        echo ' <tr>
-                               <td style="text-align: center;"><input value="'.$path.'" type="checkbox"  name="user"></td>';
+                        echo ' <tr>';
+
                         if ($item["type"] === "directory")
-                            echo '<td><p><a href="download.php?path=' . $path . '" ><i class="fa-solid fa-folder" style="color: #f39200;"></i> ' . $item["name"] . ' </a></p> </td>';
+                            echo '<td style="text-align: center;"><input value="'.$path.'" type="checkbox" rel="directory"  name="user"></td><td><p><a href="download.php?path=' . $path . '" ><i class="fa-solid fa-folder" style="color: #f39200;"></i> ' . $item["name"] . ' </a></p> </td>';
                         else
-                            echo '<td>  <p><i  class="fa-solid fa-file" style="color: #0d6efd;"></i> ' . $item["name"] . ' </p></td>';
+                            echo '<td style="text-align: center;"><input value="'.$path.'" type="checkbox" rel="file"  name="user"></td><td>  <p><i  class="fa-solid fa-file" style="color: #0d6efd;"></i> ' . $item["name"] . ' </p></td>';
                         if ($item["type"] === "directory")
                         echo ' <td style="text-align: right;"> <p> - </p></td>';
                         else

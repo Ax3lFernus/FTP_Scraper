@@ -8,11 +8,15 @@
 $('#checkboxlist').find('input:checkbox').on('click', function () {
     var showAll = true;
     $("#chat_list tr").hide();
+
+    $("#parent").show();
+
     $('#checkboxlist').find('input:checkbox:checked').each(function() {
         showAll = false;
         var status = $(this).attr('rel');
         $("#chat_list tr").filter(function () {
-            if($(this).find("input[type='hidden'][name='chatType']").val() === status)
+
+            if($(this).find("input[type=checkbox][name='user']").attr('rel') === status)
             {
                 $(this).show();
             }
@@ -115,7 +119,8 @@ $("input[type=checkbox][name='user']").on('click', function () {
 });
 
 $(document).ready(function () {
-    var selected = [{percorso: "Directory 1"}, {percorso: "Directory 1/Directory 1 1"}];
+    //var selected = [{percorso: "Directory 1"}, {percorso: "Directory 1/Directory 1 1"}];
+    var selected= require("selected");
     $.each(selected, function(i, item) {
         var path = selected[i].percorso;
         window.console.log(path);
