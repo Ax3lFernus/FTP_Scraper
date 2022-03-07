@@ -17,16 +17,8 @@ try {
     $ftp->login($_SESSION['ftp_vars']['username'], $_SESSION['ftp_vars']['password']);
     $ftp->pasv(true);
     $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Connessione effettuata. Recupero il contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "'";
-    // var_dump($ftp->scanDir('.', true));
-
-    //$items = $ftp->scanDir('.', true);
-    //$ftp->scanDir('/ciaon', true);
-    //$total = $ftp->count("/ciaon");
-    //echo $total;
-    //echo count($ftp->scanDir('/ciaon'));
     if (isset($_GET['path'])) {
         $items = $ftp->scanDir($_GET['path']);
-        $items = array_reverse($items);
     } else
         $items = $ftp->scanDir();
     $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "' recuperato";
@@ -196,18 +188,65 @@ try {
 <?php require('layouts/scripts.php'); ?>
 <script src="./assets/js/download.js"></script>
 <script>
-    $(function () {
-        $('#select_directory').on('change', function () {
-            var url = $(this).val(); // get selected value
-            b = url.indexOf('#');
-            path = url.substring(b + 1);
-            if (path) { // require a URL
-                window.location = "download.php?path=" + path; // redirect
-            } else {
-                window.location = "download.php"; // redirect
+    let selected = <?php if(isset($_SESSION['selected_files'])) echo $_SESSION['selected_files']; else echo "[]";?>;
+
+    $('#select_directory').on('change', function () {
+        var url = $(this).val(); // get selected value
+        b = url.indexOf('#');
+        path = url.substring(b + 1);
+        if (path) { // require a URL
+            window.location = "download.php?path=" + path; // redirect
+        } else {
+            window.location = "download.php"; // redirect
+        }
+        return false;
+    });
+
+    $("input[type=checkbox][name='user']").on('click', function () {
+        path = $(this).val();
+        let index = null;
+        for (let i = 0; i < selected.length; i++) {
+            if (path.localeCompare(selected[i].path) === 0) {
+                index = i;
+                break;
             }
-            return false;
+        }
+        if ($(this).is(":checked") && index == null)
+            selected.push({"path" : path});
+        else
+            selected.splice(index, 1);
+
+        console.log(selected);
+        $.ajax({
+            type: "POST",
+            dataType: "JSON",
+            url: "/functions/selectedFiles.php",
+            data: {selected_files: JSON.stringify(selected)},
+            timeout: 120000,
+            success: (result) => {
+                console.log(result);
+                let json = JSON.parse(result);
+                if (json.result) {
+                    console.log("OK");
+                } else {
+                    console.log("ERRORE");
+                }
+            },
+            error: (e) => {
+                console.log(e);
+            }
         });
+    });
+
+    $(document).ready(function () {
+        for (let i = 0; i < selected.length; i++) {
+            $("input[type=checkbox][name='user']").each(function () {
+                let val = $(this).val();
+                if (val.localeCompare(selected[i].path) === 0) {
+                    $(this).prop('checked', 'checked');
+                }
+            });
+        }
     });
 </script>
 </body>

@@ -1,10 +1,3 @@
-/*
-* Telegram Scraper v1.1.0
-* Content: message.php scripts
-* Author: Alessandro Annese & Davide De Salvo
-* Last update: 19/02/2021
-*/
-
 $('#checkboxlist').find('input:checkbox').on('click', function () {
     var showAll = true;
     $("#chat_list tr").hide();
@@ -101,37 +94,6 @@ $('.card').on('click', function (e) {
         let $checkbox = $(this).find('input:checkbox');
         $checkbox.prop('checked', !$checkbox.prop('checked'));
     }
-});
-$("input[type=checkbox][name='user']").on('click', function () {
-
-    path = $(this).val();
-    const json= [];
-    var selected = {percorso: path};
-
-
-    if ($(this).is(":checked")) {
-        json.push(selected); //inserire nel json
-    } else {
-        json.pop(selected); //togliere dal json
-    }
-    window.console.log(json);
-
-});
-
-$(document).ready(function () {
-    //var selected = [{percorso: "Directory 1"}, {percorso: "Directory 1/Directory 1 1"}];
-    var selected= require("selected");
-    $.each(selected, function(i, item) {
-        var path = selected[i].percorso;
-        window.console.log(path);
-        $("input[type=checkbox][name='user']").each(function () {
-            var val = $(this).val();
-            window.console.log(val);
-            if (val===path) {
-                $(this).prop('checked', 'checked');
-            }
-        });
-    });
 });
 
 $(document).ready(function () {
