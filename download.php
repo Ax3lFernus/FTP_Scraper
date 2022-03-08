@@ -190,6 +190,22 @@ try {
 <script>
     let selected = <?php if(isset($_SESSION['selected_files'])) echo $_SESSION['selected_files']; else echo "[]";?>;
 
+    $("#csv").on('click', _ => {
+            if (selected.length > 0) {
+                $('#md5_files').text('Errore');
+                $('#sha_files').text('Errore');
+                $('#report_url').prop('href', '').text('');
+                $('#zip_url').prop('href', '').text('');
+                $('#modalLoading').modal({backdrop: 'true', keyboard: false, show: true, focus: true}).modal('show');
+                $('#modalTitle').text('Creazione file csv in corso...');
+                window.location = "functions/getFiles.php";
+            } else {
+                $('#alertText').text('Seleziona almeno una chat.');
+                $('#alertError').addClass('show');
+                setTimeout(_ => $('#alertError').removeClass('show'), 3000);
+            }
+    });
+
     $('#select_directory').on('change', function () {
         var url = $(this).val(); // get selected value
         b = url.indexOf('#');

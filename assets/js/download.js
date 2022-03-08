@@ -47,7 +47,7 @@ $("input[type=checkbox][name='user']").click(() => {
 });
 
 
-$("#csv").on('click', _ => {
+/*$("#csv").on('click', _ => {
     if ($("#dataInizio").val() <= $("#dataFine").val()) {
         if (getCheckedChats().length > 0) {
             $('#md5_files').text('Errore');
@@ -66,7 +66,7 @@ $("#csv").on('click', _ => {
     } else {
         $("#dataFine,#dataInizio").attr('class', 'form-control is-invalid');
     }
-});
+});*/
 
 $("#json").on('click', _ => {
     if ($("#dataInizio").val() <= $("#dataFine").val()) {

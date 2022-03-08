@@ -4,7 +4,8 @@
     "type": "project",
     "version": "1.0.0",
     "require": {
-        "nicolab/php-ftp-client": "^1.6"
+        "nicolab/php-ftp-client": "^1.6",
+        "ext-json": "*"
     },
     "license": "AGPL-3.0-only",
     "authors": [
