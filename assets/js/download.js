@@ -1,13 +1,13 @@
 $('#checkboxlist').find('input:checkbox').on('click', function () {
     var showAll = true;
-    $("#chat_list tr").hide();
+    $("#element_list tr").hide();
 
     $("#parent").show();
 
     $('#checkboxlist').find('input:checkbox:checked').each(function() {
         showAll = false;
         var status = $(this).attr('rel');
-        $("#chat_list tr").filter(function () {
+        $("#element_list tr").filter(function () {
 
             if($(this).find("input[type=checkbox][name='user']").attr('rel') === status)
             {
@@ -16,7 +16,7 @@ $('#checkboxlist').find('input:checkbox').on('click', function () {
         });
     });
     if (showAll) {
-        $("#chat_list tr").show();
+        $("#element_list tr").show();
     }
 });
 
@@ -28,7 +28,7 @@ $("#check_all_chats").click(function () {
         $('#checkboxlist').find('input:checkbox').prop("disabled", false);
         $('#search').prop("disabled", false);
     }
-    $("#chat_list tr").filter(":visible").filter(function () {
+    $("#element_list tr").filter(":visible").filter(function () {
     $(this).find("input[type=checkbox][name='user']").not(this).prop('checked', $("#check_all_chats").prop('checked'));
     });
 });
@@ -132,28 +132,7 @@ $(document).ready(function () {
         });
     }
 
-    $("#search").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        var showAll = true;
-        $("#chat_list tr").hide();
-        $('#checkboxlist').find('input:checkbox:checked').each(function() {
-            showAll = false;
-            var status = $(this).attr('rel');
-            $("#chat_list tr").filter(function () {
-                if($(this).find("input[type='hidden'][name='chatType']").val() === status)
-                {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-                }
-            });
-        });
-        if (showAll) {
-            $("#chat_list tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-            });
-        }
 
-
-    });
 
 
 

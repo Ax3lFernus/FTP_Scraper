@@ -105,38 +105,42 @@ try {
                         <th style="text-align: right;" scope="col">Ultima modifica</th>
                     </tr>
                     </thead>
-                    <tbody id="chat_list">
+                    <tbody id="element_list">
                     <?php
+                    $parent_selected = false;
                     if (isset($_GET["path"])) {
+                        if(isset($_SESSION['selected_files']))
+                            $parent_selected = in_array($_GET['path'], json_decode($_SESSION['selected_files']));
                         $pos = strripos($_GET["path"], "/");
                         $path = substr($_GET["path"], 0, $pos);
                         echo ' <tr id="parent">
                                <td style="text-align: center;">-</td>';
-                        if ($path!=="")
+                        if ($path !== "")
                             echo '<td><p><a href="download.php?path=' . $path . '" ><i class="fa-solid fa-arrow-turn-up" style="color: #0d6efd;"></i> Parent </a></p> </td>';
                         else
                         echo '<td><p><a href="download.php" ><i class="fa-solid fa-arrow-turn-up" style="color: #0d6efd;"></i> Parent </a></p> </td>';
-                        echo ' <td style="text-align: right;"> <p>- </p></td>
-                               <td style="text-align: right;"> <p>- </p></td>
+                        echo ' <td style="text-align: right;"><p>-</p></td>
+                               <td style="text-align: right;"><p>-</p></td>
                                 </tr>';
                     }
-
                     foreach ($items as $key => $item) {
                         $pos = strpos($key, "#");
                         $path = substr($key, $pos + 1);
                         echo ' <tr>';
 
-                        if ($item["type"] === "directory")
-                            echo '<td style="text-align: center;"><input value="'.$path.'" type="checkbox" rel="directory"  name="user"></td><td><p><a href="download.php?path=' . $path . '" ><i class="fa-solid fa-folder" style="color: #f39200;"></i> ' . $item["name"] . ' </a></p> </td>';
-                        else
-                            echo '<td style="text-align: center;"><input value="'.$path.'" type="checkbox" rel="file"  name="user"></td><td>  <p><i  class="fa-solid fa-file" style="color: #0d6efd;"></i> ' . $item["name"] . ' </p></td>';
-                        if ($item["type"] === "directory")
-                        echo ' <td style="text-align: right;"> <p> - </p></td>';
-                        else
-                            echo ' <td style="text-align: right;"> <p>' . formatBytes($item["size"]) . ' </p></td>';
+                        if ($item["type"] === "directory") {
+                            echo '<td style="text-align: center;">';
+                            echo '<input value="' . $path . '" type="checkbox" rel="directory" name="element" ' . ($parent_selected ? 'checked disabled' : '') . '></td>';
+                            echo '<td><p><a href="#" onclick="goTo(\'' . $path . '\')"><i class="fa-solid fa-folder" style="color: #f39200;"></i> ' . $item["name"] . '</a></p></td>';
+                        } else
+                            echo '<td style="text-align: center;"><input value="'.$path.'" type="checkbox" rel="file" name="element" ' . ($parent_selected ? 'checked disabled' : '') . '></td><td><p><i class="fa-solid fa-file" style="color: #0d6efd;"></i> ' . $item["name"] . '</p></td>';
 
-                        echo '<td style="text-align: right;" > <p >ciao </p></td>
-                                </tr>';
+                        if ($item["type"] === "directory")
+                            echo '<td style="text-align: right;"><p>-</p></td><td style="text-align: right;"><p>-</p></td>';
+                        else
+                            echo '<td style="text-align: right;"><p>' . formatBytes($item["size"]) . ' </p></td><td style="text-align: right;"><p>' . gmdate("Y-m-d H:i:s", $ftp->mdtm($path)) . '</p></td>';
+
+                        echo '</tr>';
                     }
 
                     ?>
@@ -189,6 +193,7 @@ try {
 <script src="./assets/js/download.js"></script>
 <script>
     let selected = <?php if(isset($_SESSION['selected_files'])) echo $_SESSION['selected_files']; else echo "[]";?>;
+    let parent = '<?php if(isset($_GET['path'])) echo $_GET['path']; else echo ""; ?>';
 
     $("#csv").on('click', _ => {
             if (selected.length > 0) {
@@ -200,12 +205,13 @@ try {
                 $('#modalTitle').text('Creazione file csv in corso...');
                 window.location = "functions/getFiles.php";
             } else {
-                $('#alertText').text('Seleziona almeno una chat.');
+                $('#alertText').text('Nessun file selezionato.');
                 $('#alertError').addClass('show');
                 setTimeout(_ => $('#alertError').removeClass('show'), 3000);
             }
     });
 
+    //SELETTORE SX
     $('#select_directory').on('change', function () {
         var url = $(this).val(); // get selected value
         b = url.indexOf('#');
@@ -218,21 +224,29 @@ try {
         return false;
     });
 
-    $("input[type=checkbox][name='user']").on('click', function () {
+    //CLICK SU CHECKBOX
+    $("input[type=checkbox][name='element']").on('click', function () {
         path = $(this).val();
         let index = null;
-        for (let i = 0; i < selected.length; i++) {
-            if (path.localeCompare(selected[i].path) === 0) {
-                index = i;
-                break;
+        if($("input[name='element']").length === $("input[name='element']:checked").length && parent !== ''){
+            $("input[name='element']").each(function (){
+                $(this).attr('disabled', true);
+                selected = selected.filter(e => e !== $(this).val());
+            });
+            selected.push(parent);
+        } else {
+            for (let i = 0; i < selected.length; i++) {
+                if (path.localeCompare(selected[i]) === 0) {
+                    index = i;
+                    break;
+                }
             }
+            if ($(this).is(":checked") && index == null)
+                selected.push(path);
+            else
+                selected.splice(index, 1);
         }
-        if ($(this).is(":checked") && index == null)
-            selected.push({"path" : path});
-        else
-            selected.splice(index, 1);
 
-        console.log(selected);
         $.ajax({
             type: "POST",
             dataType: "JSON",
@@ -254,11 +268,27 @@ try {
         });
     });
 
+    function goTo(path){
+        $("input[name='element']").each(function () {
+            let p = $(this).val();
+            if (p.localeCompare(path) === 0) {
+                window.location.href = "/download.php?path=" + path + ($(this).prop('checked') === true ? "&selected" : "");
+            }
+        });
+    }
+
+    $("#search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#element_list tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
     $(document).ready(function () {
         for (let i = 0; i < selected.length; i++) {
-            $("input[type=checkbox][name='user']").each(function () {
+            $("input[type=checkbox][name='element']").each(function () {
                 let val = $(this).val();
-                if (val.localeCompare(selected[i].path) === 0) {
+                if (val.localeCompare(selected[i]) === 0) {
                     $(this).prop('checked', 'checked');
                 }
             });
