@@ -89,7 +89,7 @@ if (isset($_GET["path"]))
                     <tr>
                         <th class="col-1" scope="col">
                             <div class="form-check form-switch ps-5">
-                                <input class="form-check-input" type="checkbox" id="check_all_chats">
+                                <input class="form-check-input" type="checkbox" id="check_all_chats" <?php if($parent_selected) echo "checked disabled"; ?>>
                                 <label class="form-check-label" for="check_all_chats"></label>
                             </div>
                         </th>
