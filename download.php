@@ -28,6 +28,14 @@ try {
 }
 //create_folder(__DIR__ . '/tmp/' . $_SESSION['id']); CREATE FOLDER
 //file_put_contents( __DIR__ . '/tmp/' . $_SESSION['id'] . '/log.txt', $_SESSION['log']); SAVE LOGS
+$parent_selected = false;
+if (isset($_GET["path"]))
+    if (isset($_SESSION['selected_files']))
+        foreach (json_decode($_SESSION['selected_files']) as $element){
+            if(str_starts_with($_GET['path'], $element)){
+                $parent_selected = true;
+            }
+        }
 ?>
 
 <body>
@@ -39,8 +47,8 @@ try {
     </a>
     <button onclick="window.location.href = '/functions/logout.php'" class="btn btn-danger" type="button">Logout</button>
 </nav>
-<div id="page_body" class="container" style="display:none;">
-    <div class="alert alert-danger fade" id="alertError" style="margin-top: 5px;" role="alert">
+<div id="page_body" class="container">
+    <div class="alert alert-danger" id="alertError" style="margin-top: 5px; opacity: 0;" role="alert">
         <strong>Errore: </strong><span id="alertText">Seleziona almeno un file.</span>
     </div>
     <fieldset class="border mt-3 p-2">
@@ -49,42 +57,27 @@ try {
             <div class="col-3">
                 <select id="select_directory" class="form-select" name="path">
                     <?php
-                    if (isset($_GET["path"]))
-                        echo ' <option value="">/</option>';
-                    else
-                        echo ' <option value="" selected>/</option>';
-
-                    if (isset($_GET["path"]))
-                        echo ' <option value="' . $_GET["path"] . ' " selected>/' . $_GET["path"] . '</option>';
-
+                    if (isset($_GET["path"])) {
+                        echo ' <option value="/">/</option>';
+                        $expl_path = explode('/', $_GET["path"]);
+                        foreach ($expl_path as $i => $el) {
+                            echo ' <option value="' . $el . '" ' . ($i === array_key_last($expl_path) ? 'selected' : '') . ' >/' . $el . '</option>';
+                        }
+                    } else
+                        echo ' <option value="/" selected>/</option>';
+                    /*
                     foreach ($items as $key => $item) {
                         if ($item["type"] === "directory")
-                            if (isset($_GET["path"]))
+                            if (isset($_GET["path"])) {
                                 echo ' <option value="' . $key . '">/' . $_GET["path"] . '/' . $item["name"] . '</option>';
-                            else
+                            } else
                                 echo ' <option value="' . $key . '">/' . $item["name"] . '</option>';
-                    }
-
+                    }*/
                     ?>
                 </select>
                 <label for="path"></label>
             </div>
             <div class="col-6" style="margin: auto 0">
-                <div class="row mx-5" id="checkboxlist">
-                    <div class="col">
-                        <input rel="directory" type="checkbox" id="select_all_directory" name="select_all_directory">
-                        <label class="form-check-label" for="select_all_directory">Directory</label>
-                    </div>
-                    <div class="col">
-                        <input rel="channel" type="checkbox" id="select_all_chat_channel"
-                               name="select_all_chat_channel">
-                        <label class="form-check-label" for="select_all_chat_channel">Canali</label>
-                    </div>
-                    <div class="col">
-                        <input rel="chat" type="checkbox" id="select_all_chat_groups" name="select_all_chat_groups">
-                        <label class="form-check-label" for="select_all_chat_groups">Gruppi</label>
-                    </div>
-                </div>
             </div>
             <div class="col-3"><input class="form-control" id="search" type="text" placeholder="Cerca tra i file...">
             </div>
@@ -107,10 +100,7 @@ try {
                     </thead>
                     <tbody id="element_list">
                     <?php
-                    $parent_selected = false;
                     if (isset($_GET["path"])) {
-                        if(isset($_SESSION['selected_files']))
-                            $parent_selected = in_array($_GET['path'], json_decode($_SESSION['selected_files']));
                         $pos = strripos($_GET["path"], "/");
                         $path = substr($_GET["path"], 0, $pos);
                         echo ' <tr id="parent">
@@ -190,7 +180,6 @@ try {
     </div>
 </div>
 <?php require('layouts/scripts.php'); ?>
-<script src="./assets/js/download.js"></script>
 <script>
     let selected = <?php if(isset($_SESSION['selected_files'])) echo $_SESSION['selected_files']; else echo "[]";?>;
     let parent = '<?php if(isset($_GET['path'])) echo $_GET['path']; else echo ""; ?>';
@@ -213,11 +202,8 @@ try {
 
     //SELETTORE SX
     $('#select_directory').on('change', function () {
-        var url = $(this).val(); // get selected value
-        b = url.indexOf('#');
-        path = url.substring(b + 1);
-        if (path) { // require a URL
-            window.location = "download.php?path=" + path; // redirect
+        if ($(this).val() !== '/') { // require a URL
+            window.location = "download.php?path=" + $(this).val(); // redirect
         } else {
             window.location = "download.php"; // redirect
         }
@@ -228,12 +214,17 @@ try {
     $("input[type=checkbox][name='element']").on('click', function () {
         path = $(this).val();
         let index = null;
-        if($("input[name='element']").length === $("input[name='element']:checked").length && parent !== ''){
-            $("input[name='element']").each(function (){
-                $(this).attr('disabled', true);
-                selected = selected.filter(e => e !== $(this).val());
-            });
-            selected.push(parent);
+        let all_checked = $("input[name='element']").length === $("input[name='element']:checked").length;
+        if (all_checked) {
+            $("#check_all_chats").attr('disabled', true).prop('checked', true);
+            if (parent !== '') {
+                $("#check_all_chats").attr('disabled', true).prop('checked', true);
+                $("input[name='element']").each(function () {
+                    $(this).attr('disabled', true);
+                    selected = selected.filter(e => e !== $(this).val());
+                });
+                selected.push(parent);
+            }
         } else {
             for (let i = 0; i < selected.length; i++) {
                 if (path.localeCompare(selected[i]) === 0) {
@@ -266,6 +257,16 @@ try {
                 console.log(e);
             }
         });
+    });
+
+    $("#check_all_chats").click(function () {
+        if($(this).is(":checked")) {
+            $('input[name="element"]:not(:checked)').each(function (){
+               $(this).click();
+            });
+            if(parent !== '')
+                $(this).attr('disabled', true);
+        }
     });
 
     function goTo(path){

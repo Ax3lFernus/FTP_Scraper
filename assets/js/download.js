@@ -20,19 +20,6 @@ $('#checkboxlist').find('input:checkbox').on('click', function () {
     }
 });
 
-$("#check_all_chats").click(function () {
-    if($("#check_all_chats").is(":checked")) {
-        $('#checkboxlist').find('input:checkbox').prop("disabled", "disabled");
-        $('#search').prop("disabled", "disabled");
-    }else{
-        $('#checkboxlist').find('input:checkbox').prop("disabled", false);
-        $('#search').prop("disabled", false);
-    }
-    $("#element_list tr").filter(":visible").filter(function () {
-    $(this).find("input[type=checkbox][name='user']").not(this).prop('checked', $("#check_all_chats").prop('checked'));
-    });
-});
-
 $("input[type=checkbox][name='user']").click(() => {
     if ($("input[name='user']:checked:visible").length === $("input[name='user']:visible").length) {
         $("#check_all_chats").prop('checked', true);
