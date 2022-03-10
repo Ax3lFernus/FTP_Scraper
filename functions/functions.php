@@ -113,10 +113,8 @@ function delete_directory($dirname)
 }
 
 function create_folder($folderName){
-    if (file_exists($folderName)) {
-        delete_directory($folderName);
-    }
-    mkdir($folderName, 0777, true);
+    if (!file_exists($folderName))
+        mkdir($folderName, 0777, true);
 }
 
 function formatBytes($bytes, $precision = 2) {

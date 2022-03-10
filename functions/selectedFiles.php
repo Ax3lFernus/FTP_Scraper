@@ -11,6 +11,6 @@ if (!isset($_SESSION['ftp_vars'])) {
 
 if(isset($_POST['selected_files'])){
     $_SESSION['selected_files'] = $_POST['selected_files'];
-    echo '{"result": true, "JSON" : ' . $_SESSION['selected_files'] . ']';
+    echo '{"result": true}';
 }else
     echo '{"result": false, "error": "No selected_file array passed!"}';

@@ -212,20 +212,22 @@ if (isset($_GET["path"]))
 
     //CLICK SU CHECKBOX
     $("input[type=checkbox][name='element']").on('click', function () {
-        path = $(this).val();
+        let path = $(this).val();
         let index = null;
         let all_checked = $("input[name='element']").length === $("input[name='element']:checked").length;
-        if (all_checked) {
-            $("#check_all_chats").attr('disabled', true).prop('checked', true);
-            if (parent !== '') {
-                $("#check_all_chats").attr('disabled', true).prop('checked', true);
-                $("input[name='element']").each(function () {
-                    $(this).attr('disabled', true);
-                    selected = selected.filter(e => e !== $(this).val());
-                });
-                selected.push(parent);
-            }
+        if (all_checked && parent !== '') {
+            $("#check_all_chats").prop('checked', true).attr('disabled', true);
+            $("input[name='element']").each(function () {
+                $(this).attr('disabled', true);
+                selected = selected.filter(e => e !== $(this).val());
+            });
+            selected.push(parent);
         } else {
+            if(all_checked)
+                $("#check_all_chats").prop('checked', true);
+            else
+                $("#check_all_chats").prop('checked', false);
+
             for (let i = 0; i < selected.length; i++) {
                 if (path.localeCompare(selected[i]) === 0) {
                     index = i;
@@ -244,15 +246,6 @@ if (isset($_GET["path"]))
             url: "/functions/selectedFiles.php",
             data: {selected_files: JSON.stringify(selected)},
             timeout: 120000,
-            success: (result) => {
-                console.log(result);
-                let json = JSON.parse(result);
-                if (json.result) {
-                    console.log("OK");
-                } else {
-                    console.log("ERRORE");
-                }
-            },
             error: (e) => {
                 console.log(e);
             }
@@ -266,6 +259,10 @@ if (isset($_GET["path"]))
             });
             if(parent !== '')
                 $(this).attr('disabled', true);
+        }else{
+            $('input[name="element"]:checked').each(function (){
+                $(this).click();
+            });
         }
     });
 
@@ -294,6 +291,8 @@ if (isset($_GET["path"]))
                 }
             });
         }
+        if($("input[name='element']").length === $("input[name='element']:checked").length)
+            $("#check_all_chats").prop('checked', true);
     });
 </script>
 </body>
