@@ -139,15 +139,12 @@ if (isset($_GET["path"]))
             </div>
 
     </fieldset>
-    <div class="row mt-3">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-2">
-            <button id="csv" class="btn btn-success" type="button">Download csv</button>
+    <div class="row mt-2">
+        <div class="col"></div>
+        <div class="col d-grid">
+            <button id="csv" class="btn btn-success" type="button">Download</button>
         </div>
-        <div class="col-sm-2">
-            <button id="json" class="btn btn-success" type="button">Download json</button>
-        </div>
-        <div class="col-sm-4"></div>
+        <div class="col"></div>
     </div>
     <p class="mt-5 pb-2 text-muted text-center">FTP Scraper &copy; 2021-<?php echo date('Y'); ?></p>
 </div>
