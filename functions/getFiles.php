@@ -1,6 +1,7 @@
 <?php
 session_start();
 require __DIR__ . '/functions.php';
+$csv = "file_name, file_path, date_last_modification\n";
 //header('Content-Type: application/json; charset=utf-8');
 if (!isset($_SESSION['ftp_vars'])) {
     session_unset();
@@ -8,8 +9,9 @@ if (!isset($_SESSION['ftp_vars'])) {
     header("Location: /index.php");
     exit();
 }
-// I FILE SE SI TROVANO A INIZIO ARRAY "SELECTED_FILES" NON VENGONO SALVATI PERCHE' SENZA CARTELLA!
+
 function downloadRecursiveFile($ftp, $tmpDir, $path){
+    global $csv;
     $save_path = $tmpDir . '/' . $path;
     if($ftp->isDir($path)){
         create_folder($save_path);
@@ -20,9 +22,10 @@ function downloadRecursiveFile($ftp, $tmpDir, $path){
         }
     } else {
         $expl_path = explode('/', $save_path);
-        array_pop($expl_path);
+        $filename = array_pop($expl_path);
         $expl_path = implode('/', $expl_path);
         create_folder($expl_path);
+        $csv .= '"' . $filename . '","' . $save_path . '",' . gmdate("Y-m-d H:i:s", $ftp->mdtm($path)) . "\n";
         $ftp->get($save_path, $path);
     }
 }
@@ -47,6 +50,7 @@ if(isset($_SESSION['selected_files'])){
         }
         $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "' recuperato";
         file_put_contents( $tmpDir . '/log.txt', $_SESSION['log']);
+        file_put_contents( $tmpDir . '/file_list.csv', $csv);
     } catch (\FtpClient\FtpException $e) {
         $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Errore durante la connessione al server.";
         echo '{"result": false, "error": "Errore durante la connessione al server FTP!"}';
