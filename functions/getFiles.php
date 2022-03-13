@@ -43,16 +43,24 @@ if(isset($_SESSION['selected_files'])){
         $ftp->login($_SESSION['ftp_vars']['username'], $_SESSION['ftp_vars']['password']);
         $ftp->pasv(true);
         $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Connessione effettuata. Recupero il contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "'";
+        if (file_exists($tmpDir))
+            delete_directory($tmpDir);
         create_folder($tmpDir);
-        create_folder($tmpDir . '/files');
+        create_folder($tmpDir . '/content');
+        create_folder($tmpDir . '/content/files');
         foreach (json_decode($_SESSION['selected_files']) as $sel){
-            downloadRecursiveFile($ftp, $tmpDir . '/files', $sel);
+            downloadRecursiveFile($ftp, $tmpDir . '/content/files', $sel);
         }
         $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "' recuperato";
+        zipFolder($tmpDir . '/content/files', 'files');
+        delete_directory($tmpDir . '/content/files');
+        file_put_contents( $tmpDir . '/content/file_list.csv', $csv);
+        zipFolder($tmpDir . '/content', 'download');
+        delete_directory($tmpDir . '/content');
         file_put_contents( $tmpDir . '/log.txt', $_SESSION['log']);
-        file_put_contents( $tmpDir . '/file_list.csv', $csv);
     } catch (\FtpClient\FtpException $e) {
         $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Errore durante la connessione al server.";
+        delete_directory($tmpDir);
         echo '{"result": false, "error": "Errore durante la connessione al server FTP!"}';
         exit();
     }
