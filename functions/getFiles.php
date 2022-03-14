@@ -27,6 +27,7 @@ function downloadRecursiveFile($ftp, $tmpDir, $path){
         create_folder($expl_path);
         $csv .= '"' . $filename . '","' . $save_path . '",' . gmdate("Y-m-d H:i:s", $ftp->mdtm($path)) . "\n";
         $ftp->get($save_path, $path);
+        $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Download di " . $path . " effettuato.";
     }
 }
 
@@ -42,22 +43,27 @@ if(isset($_SESSION['selected_files'])){
         $ftp->connect($_SESSION['ftp_vars']['server'], $_SESSION['ftp_vars']['protocol'], $_SESSION['ftp_vars']['port']);
         $ftp->login($_SESSION['ftp_vars']['username'], $_SESSION['ftp_vars']['password']);
         $ftp->pasv(true);
-        $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Connessione effettuata. Recupero il contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "'";
+        $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Connessione effettuata. Inizio download dei file e directory.";
         if (file_exists($tmpDir))
             delete_directory($tmpDir);
         create_folder($tmpDir);
         create_folder($tmpDir . '/content');
         create_folder($tmpDir . '/content/files');
         foreach (json_decode($_SESSION['selected_files']) as $sel){
+            $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Download di " . $sel;
             downloadRecursiveFile($ftp, $tmpDir . '/content/files', $sel);
         }
-        $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "' recuperato";
+        $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Download dei file e directory completato. Creazione della cartella di download.";
         zipFolder($tmpDir . '/content/files', 'files');
         delete_directory($tmpDir . '/content/files');
         file_put_contents( $tmpDir . '/content/file_list.csv', $csv);
         zipFolder($tmpDir . '/content', 'download');
         delete_directory($tmpDir . '/content');
+        $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Cartella compressa creata.";
+        $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] MD5: " . md5_file($tmpDir . '/download.zip');
+        $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] SHA-1: " . sha1_file($tmpDir . '/download.zip');
         file_put_contents( $tmpDir . '/log.txt', $_SESSION['log']);
+        $_SESSION['log'] = "";
     } catch (\FtpClient\FtpException $e) {
         $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Errore durante la connessione al server.";
         delete_directory($tmpDir);
