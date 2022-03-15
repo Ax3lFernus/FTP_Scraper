@@ -5,7 +5,8 @@
     "version": "1.0.0",
     "require": {
         "nicolab/php-ftp-client": "^1.6",
-        "ext-json": "*"
+        "ext-json": "*",
+        "spipu/html2pdf": "^5.2"
     },
     "license": "AGPL-3.0-only",
     "authors": [

@@ -2,6 +2,7 @@
 session_start();
 require __DIR__ . '/functions.php';
 $csv = "file_name, file_path, date_last_modification\n";
+$num_file=0;
 //header('Content-Type: application/json; charset=utf-8');
 if (!isset($_SESSION['ftp_vars'])) {
     session_unset();
@@ -12,6 +13,7 @@ if (!isset($_SESSION['ftp_vars'])) {
 
 function downloadRecursiveFile($ftp, $tmpDir, $path){
     global $csv;
+    global $num_file;
     $save_path = $tmpDir . '/' . $path;
     if($ftp->isDir($path)){
         create_folder($save_path);
@@ -24,6 +26,8 @@ function downloadRecursiveFile($ftp, $tmpDir, $path){
         $expl_path = explode('/', $save_path);
         $filename = array_pop($expl_path);
         $expl_path = implode('/', $expl_path);
+
+        $num_file= $num_file+1;
         create_folder($expl_path);
         $csv .= '"' . $filename . '","' . $save_path . '",' . gmdate("Y-m-d H:i:s", $ftp->mdtm($path)) . "\n";
         $ftp->get($save_path, $path);
@@ -66,6 +70,7 @@ if(isset($_SESSION['selected_files'])){
         $_SESSION['log'] = "";
         $_SESSION['MD5']=md5_file($tmpDir . '/download.zip');
         $_SESSION['SHA']=sha1_file($tmpDir . '/download.zip');
+        require __DIR__ . '/getReport.php';
         header("location:../download.php");
     } catch (\FtpClient\FtpException $e) {
         $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Errore durante la connessione al server.";

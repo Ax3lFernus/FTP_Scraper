@@ -2,14 +2,14 @@
 error_reporting(0);
 require dirname(__DIR__, 1) . '/vendor/autoload.php';
 
-//use Spipu\Html2Pdf\Html2Pdf;
+use Spipu\Html2Pdf\Html2Pdf;
 
 //$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 1), '.env');
 //$dotenv->load();
 //$dotenv->required('TELEGRAM_API_SERVER_BASE_URL')->notEmpty();
 
 //$mimes = new Mimey\MimeTypes;
-//$html2pdf = new Html2Pdf('P', 'A4', 'it');
+$html2pdf = new Html2Pdf('P', 'A4', 'it');
 
 //$baseUrl = rtrim($_ENV['TELEGRAM_API_SERVER_BASE_URL'], '/') . '/';
 //$telegramScraperVersion = \Composer\InstalledVersions::getPrettyVersion('ax3lfernus/telegramscraper');

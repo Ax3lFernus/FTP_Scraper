@@ -185,6 +185,7 @@ if (isset($_GET["path"]))
                 <br/>
                 <p>Link per scaricare il file zip: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/download.zip'  ?>" id="zip_url" download>Download</a></p>
                 <p>Link per scaricare il file log: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/log.txt'  ?>" id="report_url" download>Download</a></p>
+                <p>Link per scaricare il report: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/report_'.$_SESSION['id'].'.pdf'  ?>" id="report_url" download>Download</a></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
