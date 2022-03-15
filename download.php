@@ -183,8 +183,8 @@ if (isset($_GET["path"]))
                         <p id="sha_files" class="text-break">Errore</p></li>
                 </ul>
                 <br/>
-                <p>Link per scaricare il report: <a href="" id="report_url" download>Download</a></p>
                 <p>Link per scaricare il file zip: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/download.zip'  ?>" id="zip_url" download>Download</a></p>
+                <p>Link per scaricare il file log: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/log.txt'  ?>" id="report_url" download>Download</a></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
