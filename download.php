@@ -150,7 +150,23 @@ if (isset($_GET["path"]))
 </div>
 
 <!-- Modal -->
-
+<div class="modal fade" id="modalLoading" tabindex="-1" role="dialog" aria-labelledby="modalTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Scaricamento dei file in corso...</h5>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div id="modalStripe" class="progress-bar progress-bar-striped progress-bar-animated"
+                         role="progressbar"
+                         aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal SHA/MD5 -->
 <div class="modal fade" id="modalHash" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -168,7 +184,7 @@ if (isset($_GET["path"]))
                 </ul>
                 <br/>
                 <p>Link per scaricare il report: <a href="" id="report_url" download>Download</a></p>
-                <p>Link per scaricare il file zip: <a href="" id="zip_url" download>Download</a></p>
+                <p>Link per scaricare il file zip: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/download.zip'  ?>" id="zip_url" download>Download</a></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
@@ -180,6 +196,8 @@ if (isset($_GET["path"]))
 <script>
     let selected = <?php if(isset($_SESSION['selected_files'])) echo $_SESSION['selected_files']; else echo "[]";?>;
     let parent = '<?php if(isset($_GET['path'])) echo $_GET['path']; else echo ""; ?>';
+    let md5='<?php if(isset($_SESSION['MD5'])) { echo $_SESSION['MD5'];unset($_SESSION['MD5']);} else echo '';?>';
+    let sha1='<?php if(isset($_SESSION['SHA'])) { echo $_SESSION['SHA'];unset($_SESSION['SHA']);} else echo '';?>';
 
     $("#csv").on('click', _ => {
             if (selected.length > 0) {
@@ -188,8 +206,8 @@ if (isset($_GET["path"]))
                 $('#report_url').prop('href', '').text('');
                 $('#zip_url').prop('href', '').text('');
                 $('#modalLoading').modal({backdrop: 'true', keyboard: false, show: true, focus: true}).modal('show');
-                $('#modalTitle').text('Creazione file csv in corso...');
                 window.location = "functions/getFiles.php";
+
             } else {
                 $('#alertText').text('Nessun file selezionato.');
                 $('#alertError').addClass('show');
@@ -280,6 +298,19 @@ if (isset($_GET["path"]))
     });
 
     $(document).ready(function () {
+
+        if(md5 !=='' && sha1 !==''){
+            $('#modalLoading').modal('hide');
+            $('#md5_files').text(md5);
+            $('#sha_files').text(sha1);
+            let href = window.location.href;
+            let dir = href.substring(0, href.lastIndexOf('/'));
+           /* $('#report_url').prop('href', result.report.url).text(dir + result.report.url.substring(1));
+            $('#zip_url').prop('href', result.zip).text(dir + result.zip.substring(1));*/
+            $('#modalHash').modal('show');
+
+        }
+
         for (let i = 0; i < selected.length; i++) {
             $("input[type=checkbox][name='element']").each(function () {
                 let val = $(this).val();

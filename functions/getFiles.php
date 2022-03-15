@@ -64,6 +64,9 @@ if(isset($_SESSION['selected_files'])){
         $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] SHA-1: " . sha1_file($tmpDir . '/download.zip');
         file_put_contents( $tmpDir . '/log.txt', $_SESSION['log']);
         $_SESSION['log'] = "";
+        $_SESSION['MD5']=md5_file($tmpDir . '/download.zip');
+        $_SESSION['SHA']=sha1_file($tmpDir . '/download.zip');
+        header("location:../download.php");
     } catch (\FtpClient\FtpException $e) {
         $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Errore durante la connessione al server.";
         delete_directory($tmpDir);

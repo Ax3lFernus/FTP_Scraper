@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cfc1e3e00aeb7ecae88315cee72b7874",
+    "content-hash": "7e63ff73ad2891b52f46c24d55a53a65",
     "packages": [
         {
             "name": "nicolab/php-ftp-client",
@@ -65,7 +65,9 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-json": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.2.0"
 }
