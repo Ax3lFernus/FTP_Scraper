@@ -43,13 +43,7 @@ function downloadRecursiveFile($ftp, $tmpDir, $path){
 
 if(isset($_SESSION['selected_files'])){
     if(isset($_GET['flags']))
-        if(is_array($_GET['flags'])) {
-            $regex = '/^.*\.(';
-            foreach ($_GET['flags'] as $key => $flag) {
-                $regex .= $flag . (array_key_last($_GET['flags']) == $key ? '' : '|');
-            }
-            $regex .= ')$/i';
-        }
+        $regex = '/^.*\.(' . $_GET['files'] . ')$/i';
     $selected = $_SESSION['selected_files'];
     $zipName = $_SESSION['id'];
     $request_date = gmdate("d-m-Y H:i:s");
