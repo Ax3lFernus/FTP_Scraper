@@ -137,6 +137,43 @@ if (isset($_GET["path"]))
             </div>
 
     </fieldset>
+    <fieldset class="border mt-3 p-2">
+        <legend class="text-center">Selezionare se vuoi determinati tipi di file</legend>
+        <div class="row mt-2 px-5">
+            <div class="col-3 mt-2">
+        <input type="checkbox" id="pdf" name="pdf">
+        <label class="form-check-label" for="pdf">.pdf</label>
+            </div>
+            <div class="col-3 mt-2">
+                <input type="checkbox" id="html" name="html">
+                <label class="form-check-label" for="html">.html</label>
+            </div>
+            <div class="col-3 mt-2">
+                <input type="checkbox" id="doc" name="doc">
+                <label class="form-check-label" for="doc">.doc</label>
+            </div>
+            <div class="col-3 mt-2">
+                <input type="checkbox" id="txt" name="txt">
+                <label class="form-check-label" for="txt">.txt</label>
+            </div>
+            <div class="col-3 mt-2">
+                <input type="checkbox" id="php" name="php">
+                <label class="form-check-label" for="php">.php</label>
+            </div>
+            <div class="col-3 mt-2">
+                <input type="checkbox" id="img" name="img">
+                <label class="form-check-label" for="img">File multimediali</label>
+            </div>
+            <div class="col-3 mt-2">
+                <input type="checkbox" id="ppt" name="ppt">
+                <label class="form-check-label" for="ppt">.ppt</label>
+            </div>
+            <div class="col-3 mt-2">
+                <input type="checkbox" id="exc" name="exc">
+                <label class="form-check-label" for="exc">.csv</label>
+            </div>
+        </div>
+    </fieldset>
     <div class="row mt-2">
         <div class="col"></div>
         <div class="col d-grid">
