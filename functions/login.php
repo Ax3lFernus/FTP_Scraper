@@ -13,18 +13,18 @@ if (isset($_POST['server']) && isset($_POST['username']) && isset($_POST['passwo
     $username = "torneotaranto4";
     $password="Balotelli45";
     //$password="wYc4zen8SpDu";
-    $_SESSION['log'] .= "[" . date("Y-m-d H:i:s") . "] Connessione al server " . ($protocol ? 'ftps' : 'ftp') . '://' . $username . '@' . $server . ':' . $port;
+    $_SESSION['log'] .= "[" . gmdate("d-m-Y H:i:s") . " GMT] Connessione al server " . ($protocol ? 'ftps' : 'ftp') . '://' . $username . '@' . $server . ':' . $port;
     $ftp = new \FtpClient\FtpClient();
     try {
         $ftp->connect($server, $protocol, $port);
         $ftp->login($username, $password);
         $_SESSION['ftp_vars'] = array('server' => $server, 'username' => $username, 'password' => $password, 'port' => $port, 'protocol' => ($protocol == 'true'));
-        $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Connessione riuscita";
+        $_SESSION['log'] .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Connessione riuscita";
         $_SESSION['id'] = generateRandomString(24);
         header('Location: /download.php');
         exit();
     } catch (\FtpClient\FtpException $e) {
-        $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Errore durante la connessione al server.";
+        $_SESSION['log'] .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Errore durante la connessione al server.";
         header('Location: /index.php?error=Credenziali errate.');
     }
 } else {

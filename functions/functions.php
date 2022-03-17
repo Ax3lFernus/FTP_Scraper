@@ -3,17 +3,7 @@ error_reporting(0);
 require dirname(__DIR__, 1) . '/vendor/autoload.php';
 
 use Spipu\Html2Pdf\Html2Pdf;
-
-//$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 1), '.env');
-//$dotenv->load();
-//$dotenv->required('TELEGRAM_API_SERVER_BASE_URL')->notEmpty();
-
-//$mimes = new Mimey\MimeTypes;
 $html2pdf = new Html2Pdf('P', 'A4', 'it');
-
-//$baseUrl = rtrim($_ENV['TELEGRAM_API_SERVER_BASE_URL'], '/') . '/';
-//$telegramScraperVersion = \Composer\InstalledVersions::getPrettyVersion('ax3lfernus/telegramscraper');
-//$serverLink = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".dirname($_SERVER['PHP_SELF']);
 
 function generateRandomString($length = 12)
 {
@@ -24,48 +14,6 @@ function generateRandomString($length = 12)
         $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
     return $randomString;
-}
-
-function curl($url)
-{
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    $output = curl_exec($curl);
-    curl_close($curl);
-    return json_decode($output);
-}
-
-function curlPOST($url, $body)
-{
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    $output = curl_exec($ch);
-    curl_close($ch);
-    return $output;
-}
-
-function downloadFileToDir($url, $fileDir)
-{
-    global $mimes;
-    $fp = fopen($fileDir, 'w');
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_FILE, $fp);
-    $data = curl_exec($ch);
-    $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-    curl_close($ch);
-    if (fwrite($fp, $data)) {
-        fclose($fp);
-        $ext = $mimes->getExtension($contentType) == '' ? '' : '.' . $mimes->getExtension($contentType);
-        if ($ext != '') rename($fileDir, $fileDir . $ext);
-        return true;
-    }
-    return false;
 }
 
 function zipFolder($path, $zipName)

@@ -10,24 +10,22 @@ if (!isset($_SESSION['ftp_vars'])) {
 $style = "<link href=\"assets/css/message.css\" rel=\"stylesheet\">";
 $page_title = "Files";
 require 'layouts/head.php';
-$_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Riconnessione per recuperare il contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "'";
+$_SESSION['log'] .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Riconnessione per recuperare il contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "'";
 $ftp = new \FtpClient\FtpClient();
 try {
     $ftp->connect($_SESSION['ftp_vars']['server'], $_SESSION['ftp_vars']['protocol'], $_SESSION['ftp_vars']['port']);
     $ftp->login($_SESSION['ftp_vars']['username'], $_SESSION['ftp_vars']['password']);
     $ftp->pasv(true);
-    $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Connessione effettuata. Recupero il contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "'";
+    $_SESSION['log'] .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Connessione effettuata. Recupero il contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "'";
     if (isset($_GET['path'])) {
         $items = $ftp->scanDir($_GET['path']);
     } else
         $items = $ftp->scanDir();
-    $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "' recuperato";
+    $_SESSION['log'] .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "' recuperato";
 } catch (\FtpClient\FtpException $e) {
-    $_SESSION['log'] .= "\n[" . date("Y-m-d H:i:s") . "] Errore durante la connessione al server.";
+    $_SESSION['log'] .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Errore durante la connessione al server.";
     echo $e;
 }
-//create_folder(__DIR__ . '/tmp/' . $_SESSION['id']); CREATE FOLDER
-//file_put_contents( __DIR__ . '/tmp/' . $_SESSION['id'] . '/log.txt', $_SESSION['log']); SAVE LOGS
 $parent_selected = false;
 if (isset($_GET["path"]))
     if (isset($_SESSION['selected_files']))
@@ -183,12 +181,12 @@ if (isset($_GET["path"]))
                         <p id="sha_files" class="text-break">Errore</p></li>
                 </ul>
                 <br/>
-                <p>Link per scaricare il file zip: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/download.zip'  ?>" id="zip_url" download>Download</a></p>
-                <p>Link per scaricare il file log: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/log.txt'  ?>" id="report_url" download>Download</a></p>
+                <p>Link per scaricare il file zip: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/download_'.$_SESSION['id'].'.zip'  ?>" id="zip_url" download>Download</a></p>
+                <p>Link per scaricare il file log: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/log_'.$_SESSION['id'].'.txt'  ?>" id="report_url" download>Download</a></p>
                 <p>Link per scaricare il report: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/report_'.$_SESSION['id'].'.pdf'  ?>" id="report_url" download>Download</a></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                <button type="button" id="download_complete" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
             </div>
         </div>
     </div>
@@ -306,7 +304,7 @@ if (isset($_GET["path"]))
             $('#sha_files').text(sha1);
             let href = window.location.href;
             let dir = href.substring(0, href.lastIndexOf('/'));
-           /* $('#report_url').prop('href', result.report.url).text(dir + result.report.url.substring(1));
+            /* $('#report_url').prop('href', result.report.url).text(dir + result.report.url.substring(1));
             $('#zip_url').prop('href', result.zip).text(dir + result.zip.substring(1));*/
             $('#modalHash').modal('show');
 
