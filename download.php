@@ -181,9 +181,9 @@ if (isset($_GET["path"]))
                         <p id="sha_files" class="text-break">Errore</p></li>
                 </ul>
                 <br/>
-                <p>Link per scaricare il file zip: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/download_'.$_SESSION['id'].'.zip'  ?>" id="zip_url" download>Download</a></p>
-                <p>Link per scaricare il file log: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/log_'.$_SESSION['id'].'.txt'  ?>" id="report_url" download>Download</a></p>
-                <p>Link per scaricare il report: <a href="<?php echo  './tmp/' . $_SESSION['id']. '/report_'.$_SESSION['id'].'.pdf'  ?>" id="report_url" download>Download</a></p>
+                <p>Link per scaricare il file zip: <a href="<?php echo  './tmp/' . $_SESSION['old_id']. '/download_'.$_SESSION['old_id'].'.zip'  ?>" id="zip_url" download>Download</a></p>
+                <p>Link per scaricare il file log: <a href="<?php echo  './tmp/' . $_SESSION['old_id']. '/log_'.$_SESSION['old_id'].'.txt'  ?>" id="report_url" download>Download</a></p>
+                <p>Link per scaricare il report: <a href="<?php echo  './tmp/' . $_SESSION['old_id']. '/report_'.$_SESSION['old_id'].'.pdf'  ?>" id="report_url" download>Download</a></p>
             </div>
             <div class="modal-footer">
                 <button type="button" id="download_complete" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>

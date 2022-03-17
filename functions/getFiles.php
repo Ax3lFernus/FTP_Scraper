@@ -6,6 +6,9 @@ $num_file = 0;
 $download_log = '';
 $_SESSION['start_download'] = gmdate("d-m-Y H:i:s");
 $regex = '';
+if(isset($_SESSION['old_id']))
+    if($_SESSION['old_id'] != '')
+        delete_directory(dirname(__DIR__, 1) . '/tmp/' . $_SESSION['old_id']);
 
 if (!isset($_SESSION['ftp_vars'])) {
     session_unset();
@@ -39,7 +42,7 @@ function downloadRecursiveFile($ftp, $tmpDir, $path){
 }
 
 if(isset($_SESSION['selected_files'])){
-    if(isset($_GET['flags'])) //?flags[]=val1&flags[]=val2&flags[]=val3
+    if(isset($_GET['flags']))
         if(is_array($_GET['flags'])) {
             $regex = '/^.*\.(';
             foreach ($_GET['flags'] as $key => $flag) {
@@ -82,6 +85,8 @@ if(isset($_SESSION['selected_files'])){
         $download_log .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Report generato.";
         file_put_contents( $tmpDir . '/log_' . $_SESSION['id'] . '.txt', $_SESSION['log'] . $download_log);
         $download_log = "";
+        $_SESSION['old_id'] = $_SESSION['id'];
+        $_SESSION['id'] = generateRandomString(24);
         header("location:../download.php");
     } catch (\FtpClient\FtpException $e) {
         $_SESSION['log'] .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Errore durante la connessione al server.";
