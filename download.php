@@ -15,8 +15,17 @@ $ftp = new \FtpClient\FtpClient();
 try {
     $ftp->connect($_SESSION['ftp_vars']['server'], $_SESSION['ftp_vars']['protocol'], $_SESSION['ftp_vars']['port']);
     $ftp->login($_SESSION['ftp_vars']['username'], $_SESSION['ftp_vars']['password']);
-    $ftp->pasv(true);
     $_SESSION['log'] .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Connessione effettuata. Recupero il contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "'";
+    if(!isset($_SESSION['pasv'])){
+        $items = $ftp->scanDir();
+        if(count($items) < 1){
+            $ftp->pasv(true);
+            $_SESSION['log'] .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Recupero non andato a buon fine, utilizzo di una connessione passiva.";
+        }
+        $_SESSION['pasv'] = (count($items) < 1);
+    } else {
+        $ftp->pasv($_SESSION['pasv']);
+    }
     if (isset($_GET['path'])) {
         $items = $ftp->scanDir($_GET['path']);
     } else
