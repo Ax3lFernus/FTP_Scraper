@@ -183,7 +183,7 @@ if (isset($_GET["path"]))
                 <label class="form-check-label" for="exc">Fogli Excel</label>
             </div>
         </div>
-        <div class="row mt-2 px-5">
+        <div class="row mt-4 px-5">
             <div class="col">
                 <input type="checkbox" id="custom" name="custom">
                 <label class="form-check-label" for="custom"></label>
@@ -288,11 +288,10 @@ if (isset($_GET["path"]))
                 filetype.push("jpg|png|gif|mp4|mp3|mov|avi|vob|wav|wma|wmv|mkv|mpg|mpeg|mid|midi|jpeg|m4a|flv|aif|aifc|aiff|aac|adt|adts");
             if(document.getElementById('custom').checked){
                 let custom = $("#type").val();
-                custom.replace(',','|');
-                custom.replace('.','');
-                custom.replace(' ', '');
+                custom = custom.replaceAll(',','|');
+                custom = custom.replaceAll('.','');
+                custom = custom.replaceAll(' ', '');
                 filetype.push(custom);
-                console.log("TYPES", custom);
             }
             for( i = 0; i < filetype.length; i++){
                 if((i+1) < filetype.length)
