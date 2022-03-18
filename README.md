@@ -3,7 +3,7 @@ Un semplice Scraper FTP scritto in PHP e completamente Web!
 
 ## Installazione
 ### Requisiti: 
-1. `PHP 7.4.x`
+1. `PHP >= 7.4.x`
     * Modifiche al file `php.ini`:
         * Valore di `max_execution_time` impostato a `0`
         * Estensione `ftp`
