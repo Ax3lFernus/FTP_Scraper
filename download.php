@@ -16,9 +16,9 @@ try {
     $ftp->connect($_SESSION['ftp_vars']['server'], $_SESSION['ftp_vars']['protocol'], $_SESSION['ftp_vars']['port']);
     $ftp->login($_SESSION['ftp_vars']['username'], $_SESSION['ftp_vars']['password']);
     $_SESSION['log'] .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Connessione effettuata. Recupero il contenuto di './" . (isset($_GET['path']) == 1 ? $_GET['path'] : "") . "'";
-    if(!isset($_SESSION['pasv'])){
+    if (!isset($_SESSION['pasv'])) {
         $items = $ftp->scanDir();
-        if(count($items) < 1){
+        if (count($items) < 1) {
             $ftp->pasv(true);
             $_SESSION['log'] .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Recupero non andato a buon fine, utilizzo di una connessione passiva.";
         }
@@ -38,8 +38,8 @@ try {
 $parent_selected = false;
 if (isset($_GET["path"]))
     if (isset($_SESSION['selected_files']))
-        foreach (json_decode($_SESSION['selected_files']) as $element){
-            if(str_starts_with($_GET['path'], $element)){
+        foreach (json_decode($_SESSION['selected_files']) as $element) {
+            if (str_starts_with($_GET['path'], $element)) {
                 $parent_selected = true;
             }
         }
@@ -52,7 +52,8 @@ if (isset($_GET["path"]))
              class="d-inline-block align-top" alt="">
         FTP Scraper
     </a>
-    <button onclick="window.location.href = '/functions/logout.php'" class="btn btn-danger" type="button">Logout</button>
+    <button onclick="window.location.href = '/functions/logout.php'" class="btn btn-danger" type="button">Logout
+    </button>
 </nav>
 <div id="page_body" class="container">
     <div class="alert alert-danger" id="alertError" style="margin-top: 5px; opacity: 0;" role="alert">
@@ -96,7 +97,8 @@ if (isset($_GET["path"]))
                     <tr>
                         <th class="col-1" scope="col">
                             <div class="form-check form-switch ps-5">
-                                <input class="form-check-input" type="checkbox" id="check_all_chats" <?php if($parent_selected) echo "checked disabled"; ?>>
+                                <input class="form-check-input" type="checkbox"
+                                       id="check_all_chats" <?php if ($parent_selected) echo "checked disabled"; ?>>
                                 <label class="form-check-label" for="check_all_chats"></label>
                             </div>
                         </th>
@@ -115,7 +117,7 @@ if (isset($_GET["path"]))
                         if ($path !== "")
                             echo '<td><p><a href="download.php?path=' . $path . '" ><i class="fa-solid fa-arrow-turn-up" style="color: #0d6efd;"></i> Parent </a></p> </td>';
                         else
-                        echo '<td><p><a href="download.php" ><i class="fa-solid fa-arrow-turn-up" style="color: #0d6efd;"></i> Parent </a></p> </td>';
+                            echo '<td><p><a href="download.php" ><i class="fa-solid fa-arrow-turn-up" style="color: #0d6efd;"></i> Parent </a></p> </td>';
                         echo ' <td style="text-align: right;"><p>-</p></td>
                                <td style="text-align: right;"><p>-</p></td>
                                 </tr>';
@@ -130,7 +132,7 @@ if (isset($_GET["path"]))
                             echo '<input value="' . $path . '" type="checkbox" rel="directory" name="element" ' . ($parent_selected ? 'checked disabled' : '') . '></td>';
                             echo '<td><p><a href="#" onclick="goTo(\'' . $path . '\')"><i class="fa-solid fa-folder" style="color: #f39200;"></i> ' . $item["name"] . '</a></p></td>';
                         } else
-                            echo '<td style="text-align: center;"><input value="'.$path.'" type="checkbox" rel="file" name="element" ' . ($parent_selected ? 'checked disabled' : '') . '></td><td><p><i class="fa-solid fa-file" style="color: #0d6efd;"></i> ' . $item["name"] . '</p></td>';
+                            echo '<td style="text-align: center;"><input value="' . $path . '" type="checkbox" rel="file" name="element" ' . ($parent_selected ? 'checked disabled' : '') . '></td><td><p><i class="fa-solid fa-file" style="color: #0d6efd;"></i> ' . $item["name"] . '</p></td>';
 
                         if ($item["type"] === "directory")
                             echo '<td style="text-align: right;"><p>-</p></td><td style="text-align: right;"><p>-</p></td>';
@@ -182,7 +184,14 @@ if (isset($_GET["path"]))
             </div>
         </div>
         <div class="row mt-2 px-5">
-            <div
+            <div class="col">
+                <input type="checkbox" id="custom" name="custom">
+                <label class="form-check-label" for="custom"></label>
+                <label class="form-check-label" for="type">Puoi anche scrivere i tipi di file che vuoi separati da virgola:</label>
+                <input type="text" id="type" name="type" placeholder="php, html, pdf, ppt">
+
+            </div>
+            <div>
     </fieldset>
     <div class="row mt-2">
         <div class="col"></div>
@@ -228,9 +237,15 @@ if (isset($_GET["path"]))
                         <p id="sha_files" class="text-break">Errore</p></li>
                 </ul>
                 <br/>
-                <p>Link per scaricare il file zip: <a href="<?php echo  './tmp/' . $_SESSION['old_id']. '/download_'.$_SESSION['old_id'].'.zip'  ?>" id="zip_url" download>Download</a></p>
-                <p>Link per scaricare il file log: <a href="<?php echo  './tmp/' . $_SESSION['old_id']. '/log_'.$_SESSION['old_id'].'.txt'  ?>" id="report_url" download>Download</a></p>
-                <p>Link per scaricare il report: <a href="<?php echo  './tmp/' . $_SESSION['old_id']. '/report_'.$_SESSION['old_id'].'.pdf'  ?>" id="report_url" download>Download</a></p>
+                <p>Link per scaricare il file zip: <a
+                            href="<?php echo './tmp/' . $_SESSION['old_id'] . '/download_' . $_SESSION['old_id'] . '.zip' ?>"
+                            id="zip_url" download>Download</a></p>
+                <p>Link per scaricare il file log: <a
+                            href="<?php echo './tmp/' . $_SESSION['old_id'] . '/log_' . $_SESSION['old_id'] . '.txt' ?>"
+                            id="report_url" download>Download</a></p>
+                <p>Link per scaricare il report: <a
+                            href="<?php echo './tmp/' . $_SESSION['old_id'] . '/report_' . $_SESSION['old_id'] . '.pdf' ?>"
+                            id="report_url" download>Download</a></p>
             </div>
             <div class="modal-footer">
                 <button type="button" id="download_complete" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
@@ -240,33 +255,39 @@ if (isset($_GET["path"]))
 </div>
 <?php require('layouts/scripts.php'); ?>
 <script>
-    let selected = <?php if(isset($_SESSION['selected_files'])) echo $_SESSION['selected_files']; else echo "[]";?>;
-    let parent = '<?php if(isset($_GET['path'])) echo $_GET['path']; else echo ""; ?>';
-    let md5='<?php if(isset($_SESSION['MD5'])) { echo $_SESSION['MD5'];unset($_SESSION['MD5']);} else echo '';?>';
-    let sha1='<?php if(isset($_SESSION['SHA'])) { echo $_SESSION['SHA'];unset($_SESSION['SHA']);} else echo '';?>';
+    let selected = <?php if (isset($_SESSION['selected_files'])) echo $_SESSION['selected_files']; else echo "[]";?>;
+    let parent = '<?php if (isset($_GET['path'])) echo $_GET['path']; else echo ""; ?>';
+    let md5 = '<?php if (isset($_SESSION['MD5'])) {
+        echo $_SESSION['MD5'];
+        unset($_SESSION['MD5']);
+    } else echo '';?>';
+    let sha1 = '<?php if (isset($_SESSION['SHA'])) {
+        echo $_SESSION['SHA'];
+        unset($_SESSION['SHA']);
+    } else echo '';?>';
 
     $("#csv").on('click', _ => {
         if (selected.length > 0) {
             let filetype = [];
             let get_param = "";
-            if(document.getElementById('pdf').checked)
+            if (document.getElementById('pdf').checked)
                 filetype.push("pdf");
-            if(document.getElementById('html').checked)
+            if (document.getElementById('html').checked)
                 filetype.push("htm|html");
-            if(document.getElementById('doc').checked)
+            if (document.getElementById('doc').checked)
                 filetype.push("docx|dot|dotx");
-            if(document.getElementById('txt').checked)
+            if (document.getElementById('txt').checked)
                 filetype.push("txt");
-            if(document.getElementById('php').checked)
+            if (document.getElementById('php').checked)
                 filetype.push("php");
-            if(document.getElementById('ppt').checked)
+            if (document.getElementById('ppt').checked)
                 filetype.push("pptx|pptm|ppt");
-            if(document.getElementById('exc').checked)
+            if (document.getElementById('exc').checked)
                 filetype.push("xls|xlsm|xltm|xltx|csv");
-            if(document.getElementById('img').checked)
+            if (document.getElementById('img').checked)
                 filetype.push("jpg|png|gif|mp4|mp3|mov|avi|vob|wav|wma|wmv|mkv|mpg|mpeg|mid|midi|jpeg|m4a|flv|aif|aifc|aiff|aac|adt|adts");
-            for( i = 0; i < filetype.length; i++){
-                if((i+1) < filetype.length)
+            for (i = 0; i < filetype.length; i++) {
+                if ((i + 1) < filetype.length)
                     get_param += filetype[i] + "|";
                 else
                     get_param += filetype[i];
@@ -276,7 +297,7 @@ if (isset($_GET["path"]))
             $('#report_url').prop('href', '').text('');
             $('#zip_url').prop('href', '').text('');
             $('#modalLoading').modal({backdrop: 'true', keyboard: false, show: true, focus: true}).modal('show');
-            if(get_param !== "")
+            if (get_param !== "")
                 window.location = "functions/getFiles.php?files=" + get_param;
             else
                 window.location = "functions/getFiles.php";
@@ -310,7 +331,7 @@ if (isset($_GET["path"]))
             });
             selected.push(parent);
         } else {
-            if(all_checked)
+            if (all_checked)
                 $("#check_all_chats").prop('checked', true);
             else
                 $("#check_all_chats").prop('checked', false);
@@ -340,20 +361,20 @@ if (isset($_GET["path"]))
     });
 
     $("#check_all_chats").click(function () {
-        if($(this).is(":checked")) {
-            $('input[name="element"]:not(:checked)').each(function (){
-               $(this).click();
+        if ($(this).is(":checked")) {
+            $('input[name="element"]:not(:checked)').each(function () {
+                $(this).click();
             });
-            if(parent !== '')
+            if (parent !== '')
                 $(this).attr('disabled', true);
-        }else{
-            $('input[name="element"]:checked').each(function (){
+        } else {
+            $('input[name="element"]:checked').each(function () {
                 $(this).click();
             });
         }
     });
 
-    function goTo(path){
+    function goTo(path) {
         $("input[name='element']").each(function () {
             let p = $(this).val();
             if (p.localeCompare(path) === 0) {
@@ -370,7 +391,7 @@ if (isset($_GET["path"]))
     });
 
     $(document).ready(function () {
-        if(md5 !=='' && sha1 !==''){
+        if (md5 !== '' && sha1 !== '') {
             $('#modalLoading').modal('hide');
             $('#md5_files').text(md5);
             $('#sha_files').text(sha1);
@@ -390,7 +411,7 @@ if (isset($_GET["path"]))
                 }
             });
         }
-        if($("input[name='element']").length === $("input[name='element']:checked").length)
+        if ($("input[name='element']").length === $("input[name='element']:checked").length)
             $("#check_all_chats").prop('checked', true);
     });
 </script>
