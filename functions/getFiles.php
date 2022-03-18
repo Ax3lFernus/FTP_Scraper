@@ -32,7 +32,7 @@ function downloadRecursiveFile($ftp, $tmpDir, $path){
         $filename = array_pop($expl_path);
         $expl_path = implode('/', $expl_path);
         create_folder($expl_path);
-        if(preg_match($regex, $filename) != false || !(isset($_GET['flags']))) {
+        if(preg_match($regex, $filename) != false || !(isset($_GET['files']))) {
             $num_file++;
             $csv .= '"' . $filename . '","' . $save_path . '",' . gmdate("Y-m-d H:i:s", $ftp->mdtm($path)) . "\n";
             $ftp->get($save_path, $path);
@@ -42,7 +42,7 @@ function downloadRecursiveFile($ftp, $tmpDir, $path){
 }
 
 if(isset($_SESSION['selected_files'])){
-    if(isset($_GET['flags']))
+    if(isset($_GET['files']))
         $regex = '/^.*\.(' . $_GET['files'] . ')$/i';
     $selected = $_SESSION['selected_files'];
     $zipName = $_SESSION['id'];

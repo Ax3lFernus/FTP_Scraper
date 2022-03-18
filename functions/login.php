@@ -2,17 +2,11 @@
 session_start();
 require __DIR__ . '/functions.php';
 if (isset($_POST['server']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['port']) && isset($_POST['protocol'])) {
-    //$server =$_POST['server'];
-    //$username = $_POST['username'];
-    //$password = $_POST['password'];
+    $server =$_POST['server'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
     $port = $_POST['port'];
     $protocol = $_POST['protocol'] == 'true';
-    //$server ="ftp.ftpscraper.altervista.org";
-    $server ="ftp.torneotaranto4.altervista.org";
-    //$username = "ftpscraper";
-    $username = "torneotaranto4";
-    $password="Balotelli45";
-    //$password="wYc4zen8SpDu";
     $_SESSION['log'] .= "[" . gmdate("d-m-Y H:i:s") . " GMT] Connessione al server " . ($protocol ? 'ftps' : 'ftp') . '://' . $username . '@' . $server . ':' . $port;
     $ftp = new \FtpClient\FtpClient();
     try {
