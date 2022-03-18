@@ -49,12 +49,13 @@ if(isset($_SESSION['selected_files'])){
     $request_date = gmdate("d-m-Y H:i:s");
     $request_date_underscore = gmdate("d-m-Y_H-i-s");
     $tmpDir = dirname(__DIR__, 1) . '/tmp/' . $zipName;
-    print($selected);
     $ftp = new \FtpClient\FtpClient();
     try {
         $ftp->connect($_SESSION['ftp_vars']['server'], $_SESSION['ftp_vars']['protocol'], $_SESSION['ftp_vars']['port']);
         $ftp->login($_SESSION['ftp_vars']['username'], $_SESSION['ftp_vars']['password']);
-        $ftp->pasv(true);
+        if(isset($_SESSION['pasv'])){
+            $ftp->pasv($_SESSION['pasv']);
+        }
         $download_log .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Riconnessione effettuata. Inizio download dei file e directory.";
         if (file_exists($tmpDir))
             delete_directory($tmpDir);
@@ -72,9 +73,9 @@ if(isset($_SESSION['selected_files'])){
         delete_directory($tmpDir . '/content');
         $download_log .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Cartella compressa creata.";
         $_SESSION['MD5'] = md5_file($tmpDir . '/download_' . $_SESSION['id'] . '.zip');
-        $_SESSION['SHA'] = sha1_file($tmpDir . '/download_' . $_SESSION['id'] . '.zip');
+        $_SESSION['SHA'] = hash_file('sha256',$tmpDir . '/download_' . $_SESSION['id'] . '.zip');
         $download_log .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] MD5: " . md5_file($tmpDir . '/download_' . $_SESSION['id'] . '.zip');
-        $download_log .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] SHA-1: " . sha1_file($tmpDir . '/download_' . $_SESSION['id'] . '.zip');
+        $download_log .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] SHA-256: " . hash_file('sha256', $tmpDir . '/download_' . $_SESSION['id'] . '.zip');
         require __DIR__ . '/getReport.php';
         $download_log .= "\n[" . gmdate("d-m-Y H:i:s") . " GMT] Report generato.";
         file_put_contents( $tmpDir . '/log_' . $_SESSION['id'] . '.txt', $_SESSION['log'] . $download_log);
