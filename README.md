@@ -7,6 +7,8 @@ Un semplice Scraper FTP scritto in PHP e completamente Web!
     * Modifiche al file `php.ini`:
         * Valore di `max_execution_time` impostato a `0`
         * Estensione `ftp`
+        * Estensione `gd`
+        * Estensione `mbstring`
 3. [Composer](https://getcomposer.org/)
 4. [Git](https://git-scm.com/downloads) (Facoltativo)
 
