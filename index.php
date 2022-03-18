@@ -51,6 +51,7 @@ require 'layouts/head.php';
 <?php require('layouts/scripts.php'); ?>
 <script>
     $("#form-btn").click(_ => {
+        $("#login").validate();
         $(".text-danger").hide();
         $("#login").submit();
         $("#form-btn").prop("disabled", true).text("Accesso in corso...");

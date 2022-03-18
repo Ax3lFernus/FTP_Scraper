@@ -135,7 +135,6 @@ if (isset($_GET["path"]))
                     </tbody>
                 </table>
             </div>
-
     </fieldset>
     <fieldset class="border mt-3 p-2">
         <legend class="text-center">Selezionare se vuoi determinati tipi di file</legend>
@@ -236,19 +235,46 @@ if (isset($_GET["path"]))
     let sha1='<?php if(isset($_SESSION['SHA'])) { echo $_SESSION['SHA'];unset($_SESSION['SHA']);} else echo '';?>';
 
     $("#csv").on('click', _ => {
-            if (selected.length > 0) {
-                $('#md5_files').text('Errore');
-                $('#sha_files').text('Errore');
-                $('#report_url').prop('href', '').text('');
-                $('#zip_url').prop('href', '').text('');
-                $('#modalLoading').modal({backdrop: 'true', keyboard: false, show: true, focus: true}).modal('show');
-                window.location = "functions/getFiles.php";
-
-            } else {
-                $('#alertText').text('Nessun file selezionato.');
-                $('#alertError').addClass('show');
-                setTimeout(_ => $('#alertError').removeClass('show'), 3000);
+        if (selected.length > 0) {
+            let filetype = [];
+            let get_param = "";
+            if($("#pdf").checked)
+                filetype.push("pdf");
+            if($("#html").checked)
+                filetype.push("htm|html");
+            if($("#doc").checked)
+                filetype.push("docx|dot|dotx");
+            if($("#txt").checked)
+                filetype.push("txt");
+            if($("#php").checked)
+                filetype.push("php");
+            if($("#ppt").checked)
+                filetype.push("pptx|pptm|ppt");
+            if($("#exc").checked)
+                filetype.push("xls|xlsm|xltm|xltx|csv");
+            if($("#img").checked)
+                filetype.push("jpg|png|gif|mp4|mp3|mov|avi|vob|wav|wma|wmv|mkv|mpg|mpeg|mid|midi|jpeg|m4a|flv|aif|aifc|aiff|aac|adt|adts");
+            for( i = 0; i < filetype.length; i++){
+                if((i+1) < filetype.length)
+                    get_param += filetype;
+                else
+                    get_param += filetype + "|";
+                console.log(get_param); //CHECK
             }
+            $('#md5_files').text('Errore');
+            $('#sha_files').text('Errore');
+            $('#report_url').prop('href', '').text('');
+            $('#zip_url').prop('href', '').text('');
+            $('#modalLoading').modal({backdrop: 'true', keyboard: false, show: true, focus: true}).modal('show');
+            if(get_param !== "")
+                window.location = "functions/getFiles.php?files=" + get_param;
+            else
+                window.location = "functions/getFiles.php";
+        } else {
+            $('#alertText').text('Nessun file selezionato.');
+            $('#alertError').addClass('show');
+            setTimeout(_ => $('#alertError').removeClass('show'), 3000);
+        }
     });
 
     //SELETTORE SX
@@ -334,7 +360,6 @@ if (isset($_GET["path"]))
     });
 
     $(document).ready(function () {
-
         if(md5 !=='' && sha1 !==''){
             $('#modalLoading').modal('hide');
             $('#md5_files').text(md5);
