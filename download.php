@@ -140,36 +140,36 @@ if (isset($_GET["path"]))
         <legend class="text-center">Selezionare se vuoi determinati tipi di file</legend>
         <div class="row mt-2 px-5">
             <div class="col-3 mt-2">
-        <input type="checkbox" id="pdf" name="pdf">
-        <label class="form-check-label" for="pdf">.pdf</label>
-            </div>
-            <div class="col-3 mt-2">
-                <input type="checkbox" id="html" name="html">
-                <label class="form-check-label" for="html">.html</label>
-            </div>
-            <div class="col-3 mt-2">
-                <input type="checkbox" id="doc" name="doc">
-                <label class="form-check-label" for="doc">.doc</label>
-            </div>
-            <div class="col-3 mt-2">
-                <input type="checkbox" id="txt" name="txt">
-                <label class="form-check-label" for="txt">.txt</label>
+                <input type="checkbox" id="pdf" name="pdf">
+                <label class="form-check-label" for="pdf">.pdf</label>
             </div>
             <div class="col-3 mt-2">
                 <input type="checkbox" id="php" name="php">
                 <label class="form-check-label" for="php">.php</label>
             </div>
             <div class="col-3 mt-2">
+                <input type="checkbox" id="html" name="html">
+                <label class="form-check-label" for="html">.html</label>
+            </div>
+            <div class="col-3 mt-2">
+                <input type="checkbox" id="txt" name="txt">
+                <label class="form-check-label" for="txt">.txt</label>
+            </div>
+            <div class="col-3 mt-2">
                 <input type="checkbox" id="img" name="img">
                 <label class="form-check-label" for="img">File multimediali</label>
             </div>
             <div class="col-3 mt-2">
+                <input type="checkbox" id="doc" name="doc">
+                <label class="form-check-label" for="doc">Documenti Word</label>
+            </div>
+            <div class="col-3 mt-2">
                 <input type="checkbox" id="ppt" name="ppt">
-                <label class="form-check-label" for="ppt">.ppt</label>
+                <label class="form-check-label" for="ppt">Power Point</label>
             </div>
             <div class="col-3 mt-2">
                 <input type="checkbox" id="exc" name="exc">
-                <label class="form-check-label" for="exc">.csv</label>
+                <label class="form-check-label" for="exc">Fogli Excel</label>
             </div>
         </div>
     </fieldset>
@@ -238,28 +238,27 @@ if (isset($_GET["path"]))
         if (selected.length > 0) {
             let filetype = [];
             let get_param = "";
-            if($("#pdf").checked)
+            if(document.getElementById('pdf').checked)
                 filetype.push("pdf");
-            if($("#html").checked)
+            if(document.getElementById('html').checked)
                 filetype.push("htm|html");
-            if($("#doc").checked)
+            if(document.getElementById('doc').checked)
                 filetype.push("docx|dot|dotx");
-            if($("#txt").checked)
+            if(document.getElementById('txt').checked)
                 filetype.push("txt");
-            if($("#php").checked)
+            if(document.getElementById('php').checked)
                 filetype.push("php");
-            if($("#ppt").checked)
+            if(document.getElementById('ppt').checked)
                 filetype.push("pptx|pptm|ppt");
-            if($("#exc").checked)
+            if(document.getElementById('exc').checked)
                 filetype.push("xls|xlsm|xltm|xltx|csv");
-            if($("#img").checked)
+            if(document.getElementById('img').checked)
                 filetype.push("jpg|png|gif|mp4|mp3|mov|avi|vob|wav|wma|wmv|mkv|mpg|mpeg|mid|midi|jpeg|m4a|flv|aif|aifc|aiff|aac|adt|adts");
             for( i = 0; i < filetype.length; i++){
                 if((i+1) < filetype.length)
-                    get_param += filetype;
+                    get_param += filetype[i] + "|";
                 else
-                    get_param += filetype + "|";
-                console.log(get_param); //CHECK
+                    get_param += filetype[i];
             }
             $('#md5_files').text('Errore');
             $('#sha_files').text('Errore');
