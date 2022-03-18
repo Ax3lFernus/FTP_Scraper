@@ -24,7 +24,6 @@ $htmlReportPage = '
         <td style="width: 50%">
             <strong>Dati utente loggato: </strong>
             <ul style="list-style-type:none;">
-                <li style="padding-bottom: 5px;">ID: ' . (isset($_SESSION['id']) ? $_SESSION['id'] : ' ') . '</li>
                 <li style="padding-bottom: 5px;">Username: ' . (isset($_SESSION['ftp_vars']['username']) ? $_SESSION['ftp_vars']['username'] : ' ') . '</li>
                 <li style="padding-bottom: 5px;">Server: ' . (isset($_SESSION['ftp_vars']['server']) ? $_SESSION['ftp_vars']['server'] : ' ') . '</li>
                 <li style="padding-bottom: 5px;">Protocollo: ' . (isset($_SESSION['ftp_vars']['protocol']) ? ($_SESSION['ftp_vars']['protocol']) ? 'FTPS' : 'FTP' : ' ') . '</li>
@@ -46,5 +45,6 @@ $htmlReportPage = '
 <ul style="list-style-type:none;">
     <li style="padding-bottom: 5px;"><b>Nome:</b> download_' . $_SESSION['id'] . '.zip</li>
     <li style="padding-bottom: 5px;"><b>MD5:</b> ' . $_SESSION['MD5'] . '</li>
-    <li><b>SHA256:</b> ' . $_SESSION['SHA'] . '</li>
+    <li style="padding-bottom: 5px;"><b>SHA256:</b> ' . $_SESSION['SHA'] . '</li>
+    <li style="padding-bottom: 5px;"><b>Contenuto:</b> Il file zip contiene una cartella compressa chiamata "files" che ha al suo interno tutti i file che sono stati scaricati e un file csv chiamato "file_list" che contiene la lista dei file scaricati</li>
 </ul>';

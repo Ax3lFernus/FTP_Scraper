@@ -172,6 +172,8 @@ if (isset($_GET["path"]))
                 <label class="form-check-label" for="exc">.csv</label>
             </div>
         </div>
+        <div class="row mt-2 px-5">
+            <div
     </fieldset>
     <div class="row mt-2">
         <div class="col"></div>
@@ -211,9 +213,9 @@ if (isset($_GET["path"]))
             </div>
             <div class="modal-body">
                 <ul style="list-style-type:none;">
-                    <li><b>Hash del report MD5: </b>
+                    <li><b>Hash del file zip MD5: </b>
                         <p id="md5_files" class="text-break">Errore</p></li>
-                    <li><b>Hash del report SHA256: </b>
+                    <li><b>Hash del file zip SHA256: </b>
                         <p id="sha_files" class="text-break">Errore</p></li>
                 </ul>
                 <br/>
