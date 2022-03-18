@@ -286,8 +286,16 @@ if (isset($_GET["path"]))
                 filetype.push("xls|xlsm|xltm|xltx|csv");
             if (document.getElementById('img').checked)
                 filetype.push("jpg|png|gif|mp4|mp3|mov|avi|vob|wav|wma|wmv|mkv|mpg|mpeg|mid|midi|jpeg|m4a|flv|aif|aifc|aiff|aac|adt|adts");
-            for (i = 0; i < filetype.length; i++) {
-                if ((i + 1) < filetype.length)
+            if(document.getElementById('custom').checked){
+                let custom = $("#type").val();
+                custom.replace(',','|');
+                custom.replace('.','');
+                custom.replace(' ', '');
+                filetype.push(custom);
+                console.log("TYPES", custom);
+            }
+            for( i = 0; i < filetype.length; i++){
+                if((i+1) < filetype.length)
                     get_param += filetype[i] + "|";
                 else
                     get_param += filetype[i];
