@@ -43,9 +43,9 @@ Una volta inseriti i dati, cliccare sul pulsante "Accedi al server"
 ### Selezione delle cartelle
 Effettuato il login, si presenterà l'interfaccia sottostante:
 ![Interfaccia Web del programma](/../screenshots/screenshots/front_end_2.png?raw=true "Interfaccia Web del programma")
-Tramite la sezione "Seleziona i file" è possibile selezionare i file o le cartelle tramite le checkbox presenti su ogni riga, cercare tra i file visualizzati e navigare rapidamente nelle varie sotto-directory.
+Tramite la sezione "Seleziona i file" è possibile selezionare i file o le cartelle tramite le checkbox presenti su ogni riga, cercare tra i file visualizzati e navigare rapidamente nelle varie sotto-directory:
 ![Selezione dei file e delle estensioni](/../screenshots/screenshots/front_end_3.png?raw=true "Selezione dei file e delle estensioni")
-Una volta selezionati i file è possibile scegliere i filtri tamite presenti nella sezione "Seleziona se vuoi determinati tipi di file". Se l'estensione voluta non è presente, è possibile inserire una o più estensioni manuali separate da virgola all'interno della textbox sottostante.
+Una volta selezionati i file è possibile scegliere i filtri presenti nella sezione "Seleziona se vuoi determinati tipi di file". Se l'estensione voluta non è presente, è possibile inserire una o più estensioni manuali separate da virgola all'interno della textbox sottostante.
 Per far partire il download, è sufficiente cliccare sul pulsante "Download".
 ### Fase di download
 Durante le operazioni di download sarà mostrata una barra di caricamento:
