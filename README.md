@@ -23,5 +23,6 @@ Un semplice Scraper FTP scritto in PHP e completamente Web!
 ### Linux
 1. Installare un WebServer (Es: Apache)
 2. Posizionarsi nella cartella del WebServer ed eseguire il comando `git clone https://github.com/ax3lfernus/FTP_Scraper`
-3. Eseguire, all'interno della root della cartella scaricata, il comando `composer install`
-4. Recarsi tramite il browser all'url o all'IP del WebServer per avviare il tutto.
+3. Posizionarsi all'interno della cartella FTP_Scraper `cd FTP_Scraper`
+4. Eseguire, all'interno della root della cartella scaricata, il comando `composer install`
+5. Recarsi tramite il browser all'url o all'IP del WebServer per avviare il tutto.
